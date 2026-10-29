@@ -18,7 +18,7 @@ const INFO = {
   why:'<b>Reading this record:</b> U.S. post readings begin in late 2011. A nearby Chinese station can cross-check overlapping days, but neither reading represents the whole city.'},
  Guangzhou: {lon:113.26,lat:23.13,side:'right',region:'South · Pearl River Delta',
   policy:'Pearl River Delta 2017 regional goal: ~15% below 2012.',
-  why:'<b>Reading this record:</b> The supplied City Station column duplicates the U.S. series exactly. It is excluded from independent station comparisons.'}
+  why:'<b>Reading this record:</b> The dataset\'s City Station column duplicates the U.S. series exactly. It is excluded from independent station comparisons.'}
 };
 const BANDS = [
   {max:35,name:'',r:'≤35'},{max:75,name:'',r:'>35–75'},{max:115,name:'',r:'>75–115'},

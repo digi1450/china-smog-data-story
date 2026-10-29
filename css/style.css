@@ -1,5 +1,5 @@
 
-/* Layout: a map-led explorer (map left, city file right) opens the page; a short case-file story runs below in one reading column. */
+/* Shared theme and chart styles. */
 :root {
   --bg: #eceeea;
   --surface: #f8f9f6;
@@ -175,7 +175,7 @@ footer { padding-top: 40px; margin-top: 40px; border-top: 1px solid var(--rule);
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
-/* English-only labels and source/coverage additions. */
+/* Supporting controls and data tables. */
 body { margin: 0; }
 .status { margin-block: 14px; padding: 12px; border: 1px solid var(--rule); font-family: var(--f-mono); font-size: 13px; }
 .status[hidden] { display: none; }
@@ -191,7 +191,7 @@ summary { cursor:pointer; font-family:var(--f-display); }
 .policy-note { border-left:3px solid var(--accent); padding-left:12px; font-size:14px; color:var(--ink-2); }
 @media(max-width:520px) { .cityname .en { font-size:28px; } .when { font-size:28px; } }
 
-/* A wider editorial rhythm: shared outer edges, readable text measures. */
+/* Page layout and responsive composition. */
 :root { --page: 1360px; --gutter: clamp(20px, 4vw, 72px); }
 body { padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px)); }
 .wide { width:100%; max-width:var(--page); }
