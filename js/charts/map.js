@@ -1,6 +1,6 @@
-import { reducedMotion } from '../motion.js';
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js';
-import { selectCity } from '../app.js';
+import { reducedMotion } from '../motion.js?v=20261029-2';
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261029-2';
+import { selectCity } from '../app.js?v=20261029-2';
 
 let mapSel = null;
 function drawMap() {

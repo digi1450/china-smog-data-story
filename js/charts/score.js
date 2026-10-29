@@ -1,6 +1,6 @@
-import { reducedMotion } from '../motion.js';
+import { reducedMotion } from '../motion.js?v=20261029-2';
 let revealed = false;
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js';
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261029-2';
 
 function drawScore() {
   const W = widthOf('score'), narrow = W < 560, m = {t:8, r: narrow ? 8 : 230, b:26, l: narrow ? 8 : 96}, rh = narrow ? 70 : 54;

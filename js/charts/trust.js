@@ -1,4 +1,4 @@
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js';
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261029-2';
 
 const sel = document.getElementById('stationSel');
 sel.innerHTML = D.trust.map((t, i) => `<option value="${i}">${t.city} · ${t.station}</option>`).join('');

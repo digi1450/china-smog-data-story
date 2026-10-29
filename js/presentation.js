@@ -1,7 +1,7 @@
-import { D, DAY0, fmt, bandOf } from './core.js';
-import { reducedMotion } from './motion.js';
-import { createWheelIntent } from './wheel-intent.js';
-import { toggleScoreReveal } from './charts/score.js';
+import { D, DAY0, fmt, bandOf } from './core.js?v=20261029-2';
+import { reducedMotion } from './motion.js?v=20261029-2';
+import { createWheelIntent } from './wheel-intent.js?v=20261029-2';
+import { toggleScoreReveal } from './charts/score.js?v=20261029-2';
 
 const chapters = [
   ['top', 'The question', '2010–2015'],

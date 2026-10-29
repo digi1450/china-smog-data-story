@@ -1,14 +1,14 @@
-import { createPlayback } from './playback.js';
-import { setupScrollMotion, setupDisclosureMotion, reducedMotion } from './motion.js';
-import { setupPresentation, navigateToScene } from './presentation.js';
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from './core.js';
-import { drawMap,updateMap } from './charts/map.js';
-import { drawMini,updateMiniMarker } from './charts/mini.js';
-import { drawCalendar } from './charts/calendar.js';
-import { drawScore } from './charts/score.js';
-import { drawWind } from './charts/wind.js';
-import { drawTrust } from './charts/trust.js';
-import { drawCrisis,drawTrend,drawExceed,fillEvidence } from './charts/story.js';
+import { createPlayback } from './playback.js?v=20261029-2';
+import { setupScrollMotion, setupDisclosureMotion, reducedMotion } from './motion.js?v=20261029-2';
+import { setupPresentation, navigateToScene } from './presentation.js?v=20261029-2';
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from './core.js?v=20261029-2';
+import { drawMap,updateMap } from './charts/map.js?v=20261029-2';
+import { drawMini,updateMiniMarker } from './charts/mini.js?v=20261029-2';
+import { drawCalendar } from './charts/calendar.js?v=20261029-2';
+import { drawScore } from './charts/score.js?v=20261029-2';
+import { drawWind } from './charts/wind.js?v=20261029-2';
+import { drawTrust } from './charts/trust.js?v=20261029-2';
+import { drawCrisis,drawTrend,drawExceed,fillEvidence } from './charts/story.js?v=20261029-2';
 
 const bandLegendHTML = BANDS.map((b,i) => `<span><i style="background:var(--b${i})"></i>${b.r}</span>`).join('');
 document.getElementById('bandLegend').innerHTML = bandLegendHTML;
