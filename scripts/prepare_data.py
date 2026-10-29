@@ -1,7 +1,7 @@
 """Rebuild every analytical input using only Python's standard library.
 
 Run from any directory: python3 scripts/prepare_data.py
-Definitions, exclusions and sources are documented in docs/METHODOLOGY.md.
+Download instructions, definitions and sources are documented in README.md.
 """
 from pathlib import Path
 from collections import Counter, defaultdict

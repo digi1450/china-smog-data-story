@@ -11,6 +11,9 @@ __pycache__/
 output/
 .playwright-cli/
 
+# Downloaded source datasets stay local; processed chart data is tracked
+/data/raw/
+
 # Local working notes (not part of the public project)
 /docs/METHODOLOGY.md
 /docs/SOURCES.md

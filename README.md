@@ -25,7 +25,7 @@ Open [the local preview](http://127.0.0.1:8000). Stop the server with Ctrl+C. Do
 | `js/core.js` | Shared state, labels, concentration bins and utilities |
 | `js/data.js` | Load local JSON and map geometry |
 | `js/charts/` | Map, monthly mini-chart, daily stripes, comparison, wind, station agreement and added story charts |
-| `data/raw/` | UCI archive and original five CSV files |
+| `data/raw/` | Local UCI inputs, downloaded separately and ignored by Git |
 | `data/processed/` | Calculated observations, statistics and map geometry |
 | `scripts/prepare_data.py` | Reproducible calculation pipeline; Python standard library only |
 | `scripts/verify_data.py` | Independent numerical checks from raw files |
@@ -33,12 +33,29 @@ Open [the local preview](http://127.0.0.1:8000). Stop the server with Ctrl+C. Do
 
 ## Recompute and verify
 
+The website uses the committed files in `data/processed/` and runs without the raw dataset. Download the raw inputs only when rebuilding or verifying the calculations.
+
+1. Download [the original UCI archive](https://archive.ics.uci.edu/static/public/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities.zip).
+2. Extract the ZIP, then extract `FiveCitiePMData.rar` inside it.
+3. Place the five CSV files directly in `data/raw/`: `BeijingPM20100101_20151231.csv`, `ChengduPM20100101_20151231.csv`, `GuangzhouPM20100101_20151231.csv`, `ShanghaiPM20100101_20151231.csv` and `ShenyangPM20100101_20151231.csv`.
+
+On macOS, the equivalent commands from the project directory are:
+
+```sh
+mkdir -p data/raw
+curl --fail --location 'https://archive.ics.uci.edu/static/public/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities.zip' -o data/raw/uci-five-cities.zip
+unzip -o data/raw/uci-five-cities.zip -d data/raw
+bsdtar -xf data/raw/FiveCitiePMData.rar -C data/raw
+```
+
+Then run:
+
 ```sh
 npm run data
 npm run check
 ```
 
-Run these after changing calculation rules. The site reads the resulting JSON, and all main numerical findings update from it. Raw CSV files are deliberately preserved. Display rounding does not determine classification thresholds.
+Run these after changing calculation rules. The site reads the resulting JSON, and all main numerical findings update from it. The verification script checks raw CSV hashes against the processed manifest. Keep downloaded files unchanged; `data/raw/` remains local and is excluded from new commits. Display rounding does not determine classification thresholds.
 
 ## Evidence boundaries
 
