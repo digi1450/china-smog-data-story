@@ -33,7 +33,7 @@ const fmt = d3.format('.1f');
 const ym = d3.timeFormat('%Y-%m');
 
 const COMMON_I = 40; // May 2013: first month all five monitors report
-const state = { city: 'Beijing', month: 48, min: COMMON_I };
+const state = { city: 'Beijing', month: COMMON_I, min: COMMON_I };
 
 /* monthly lookup */
 const MV = {};

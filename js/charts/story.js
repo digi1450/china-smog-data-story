@@ -1,3 +1,5 @@
+import { introduceChart, revealLine } from '../motion.js';
+import { selectCity } from '../app.js';
 import {D,CITIES,cvar,state,MV,MONTHS,PLAN_I,DAY0,fmt,svgFor,widthOf,showTip,hideTip,annualOf,fmtDate} from '../core.js';
 
 function drawCrisis() {
@@ -10,11 +12,12 @@ function drawCrisis() {
   svg.append('g').attr('class','axis').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(0));
   svg.append('g').attr('class','axis').attr('transform',`translate(0,${H-m.b})`).call(d3.axisBottom(x).ticks(W<500?4:8).tickFormat(d3.timeFormat('%d Jan')).tickSizeOuter(0));
   [25,15].forEach((v,i)=>svg.append('line').attr('x1',m.l).attr('x2',W-m.r).attr('y1',y(v)).attr('y2',y(v)).style('stroke','var(--ink-2)').style('stroke-dasharray',i?'2,3':'7,4'));
-  svg.append('path').datum(rows).attr('d',d3.line().defined(r=>r.v!=null).x(r=>x(r.d)).y(r=>y(r.v))).style('fill','none').style('stroke',cvar('Beijing')).style('stroke-width',2);
+  svg.append('path').attr('class','story-line').datum(rows).attr('d',d3.line().defined(r=>r.v!=null).x(r=>x(r.d)).y(r=>y(r.v))).style('fill','none').style('stroke',cvar('Beijing')).style('stroke-width',2);
   svg.selectAll('circle').data(rows.filter(r=>r.v!=null)).join('circle').attr('cx',r=>x(r.d)).attr('cy',r=>y(r.v)).attr('r',3.5).style('fill',cvar('Beijing'))
     .on('pointermove',(e,r)=>showTip(`${fmtDate(r.d)}<br>${fmt(r.v)} µg/m³`,e)).on('pointerleave',hideTip);
   const peak=d3.greatest(rows,r=>r.v??-1), px=x(peak.d);
   svg.append('text').attr('class','lbl-strong').attr('x',px).attr('y',y(peak.v)-13).attr('text-anchor',px>W-130?'end':px<120?'start':'middle').text(`${fmtDate(peak.d)} · ${fmt(peak.v)}`);
+  introduceChart(svg,'crisis',chart=>revealLine(chart));
 }
 
 function drawTrend() {
@@ -30,7 +33,7 @@ function drawTrend() {
   svg.append('line').attr('x1',boundary).attr('x2',boundary).attr('y1',m.t).attr('y2',H-m.b).style('stroke','var(--ink-2)').style('stroke-dasharray','4,3');
   svg.append('text').attr('class','lbl').attr('x',boundary+5).attr('y',m.t-9).text(W<500?'Sep 2013':'Action Plan · Sep 2013');
   const line=d3.line().defined(v=>v!=null).x((v,i)=>x(MONTHS[i])).y(v=>y(v));
-  [...CITIES.filter(c=>c!==state.city),state.city].forEach(c=>svg.append('path').attr('d',line(MV[c])).style('fill','none').style('stroke',cvar(c)).style('stroke-width',c===state.city?2.8:1.5).style('opacity',c===state.city?1:.55));
+  [...CITIES.filter(c=>c!==state.city),state.city].forEach(c=>svg.append('path').attr('class','trend-series').attr('data-city',c).attr('d',line(MV[c])).style('fill','none').style('stroke',cvar(c)).style('stroke-width',c===state.city?2.8:1.5).style('opacity',c===state.city?1:.55));
   const highlight=svg.append('g').attr('hidden',true);
   highlight.append('line').attr('y1',m.t).attr('y2',H-m.b).style('stroke','var(--ink-3)');
   svg.append('rect').attr('x',m.l).attr('y',m.t).attr('width',W-m.r-m.l).attr('height',H-m.b-m.t).style('fill','transparent')
@@ -39,7 +42,19 @@ function drawTrend() {
       highlight.attr('hidden',null).select('line').attr('x1',x(MONTHS[i])).attr('x2',x(MONTHS[i]));
       showTip(`<b>${d3.timeFormat('%b %Y')(MONTHS[i])}</b><br>`+CITIES.map(c=>`${c}: ${MV[c][i]==null?'no data':fmt(MV[c][i])+' µg/m³'}`).join('<br>'),e);
     }).on('pointerleave',()=>{highlight.attr('hidden',true);hideTip();});
-  document.getElementById('trendLegend').innerHTML=CITIES.map(c=>`<span><i style="background:${cvar(c)}"></i>${c}${c===state.city?' (selected)':''}</span>`).join('');
+  const legend=document.getElementById('trendLegend');
+  legend.innerHTML=CITIES.map(c=>`<button type="button" data-city="${c}" aria-pressed="${c===state.city}"><i style="background:${cvar(c)}"></i>${c}</button>`).join('');
+  const emphasize=c=>svg.selectAll('.trend-series').style('opacity',function(){return this.dataset.city===c?1:.18;}).style('stroke-width',function(){return this.dataset.city===c?2.8:1.5;});
+  legend.querySelectorAll('button').forEach(button=>{
+    button.addEventListener('click',()=>selectCity(button.dataset.city));
+    button.addEventListener('pointerenter',()=>emphasize(button.dataset.city));
+    button.addEventListener('focus',()=>emphasize(button.dataset.city));
+    button.addEventListener('pointerleave',()=>emphasize(state.city));
+    button.addEventListener('blur',()=>emphasize(state.city));
+  });
+  introduceChart(svg,'trend',chart=>{
+    chart.selectAll('.trend-series').each(function(){revealLine(d3.select(this.parentNode),`path[data-city="${this.dataset.city}"]`);});
+  });
 }
 
 function drawExceed() {
@@ -51,9 +66,13 @@ function drawExceed() {
     svg.append('text').attr('class','lbl-strong').attr('x',0).attr('y',cy+19).text(c);
     [2014,2015].forEach((yr,j)=>{
       const a=annualOf(c,yr),p=100*a.above150/a.days, yy=cy+j*18;
-      svg.append('rect').attr('x',x(0)).attr('y',yy).attr('width',x(p)-x(0)).attr('height',12).style('fill',j?cvar(c):'var(--before)');
+      svg.append('rect').attr('class','exceed-bar').attr('x',x(0)).attr('y',yy).attr('width',x(p)-x(0)).attr('height',12).style('fill',j?cvar(c):'var(--before)');
       svg.append('text').attr('class','lbl').attr('x',x(p)+5).attr('y',yy+10).text(`${fmt(p)}%`);
     });
+  });
+  introduceChart(svg,'exceed',chart=>{
+    chart.selectAll('.exceed-bar').each(function(){this.dataset.width=this.getAttribute('width');})
+      .attr('width',0).transition('intro').duration(600).delay((d,i)=>i*35).attr('width',function(){return this.dataset.width;});
   });
   const rows=CITIES.flatMap(c=>[2014,2015].map(y=>{const a=annualOf(c,y);return [c,y,a.above150,`${fmt(100*a.above150/a.days)}%`,a.days,a.missing];}));
   document.getElementById('exceedTable').innerHTML=table(['City','Year','Days >150','Share of valid days','Valid days','Missing days'],rows,'Grey bars: 2014. City-coloured bars: 2015.');

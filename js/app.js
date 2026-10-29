@@ -1,3 +1,5 @@
+import { createPlayback } from './playback.js';
+import { setupScrollMotion, reducedMotion } from './motion.js';
 import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from './core.js';
 import { drawMap,updateMap } from './charts/map.js';
 import { drawMini,updateMiniMarker } from './charts/mini.js';
@@ -26,7 +28,7 @@ document.getElementById('rangeBtn').addEventListener('click', e => {
   document.getElementById('rangeNote').textContent = all
     ? 'Showing all months. Before May 2013 some monitors were not running yet, so not every city can be compared.'
     : 'Showing May 2013 – Dec 2015, a shared calendar window; with missing months still excluded.';
-  stopPlay(); layoutTrack(); setMonth(all ? 36 : 48);
+  stopPlay(); layoutTrack(); setMonth(all ? 36 : COMMON_I);
 });
 
 /* city chips */
@@ -48,14 +50,40 @@ function setMonth(i) {
 }
 slider.addEventListener('input', () => { stopPlay(); setMonth(+slider.value); });
 const playBtn = document.getElementById('play');
-let timer = null;
-function stopPlay() { if (timer) { clearInterval(timer); timer = null; playBtn.textContent = '▶ Play'; } }
-playBtn.addEventListener('click', () => {
-  if (timer) { stopPlay(); return; }
-  if (state.month >= 71) setMonth(state.min);
-  playBtn.textContent = '❚❚ Pause';
-  timer = setInterval(() => { if (state.month >= 71) { stopPlay(); return; } setMonth(state.month + 1); }, 420);
+let playback;
+function stopPlay() { playback?.pause(); }
+playBtn.addEventListener('click', () => playback?.toggle());
+document.getElementById('replay').addEventListener('click', () => {
+  setMonth(state.min); playback?.play();
 });
+
+function setupPlayback() {
+  playback = createPlayback({
+    atEnd: () => state.month >= 71,
+    advance: () => setMonth(state.month + 1),
+    reset: () => setMonth(state.min),
+    onState: ({requested, active, blockers}) => {
+      playBtn.textContent = requested ? '❚❚ Pause' : '▶ Play';
+      playBtn.setAttribute('aria-label', requested ? 'Pause the months' : 'Play the months');
+      playBtn.setAttribute('aria-pressed', String(requested));
+      document.getElementById('panel').setAttribute('aria-live', requested ? 'off' : 'polite');
+      document.getElementById('playbackStatus').textContent = requested
+        ? active ? 'Playing month by month · loops at December 2015' : 'Playback paused while the map is out of view'
+        : 'Paused · select a month or press Play to explore';
+    }
+  });
+  playback.suspend('hidden', document.hidden);
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      playback.suspend('offscreen', !entry.isIntersecting);
+      document.querySelector('.back-top').classList.toggle('is-visible', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+    }, {threshold:0});
+    observer.observe(document.querySelector('#explorer'));
+  }
+  document.addEventListener('visibilitychange', () => playback.suspend('hidden',document.hidden));
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', e => {if (e.matches) stopPlay();});
+  if (!reducedMotion()) playback.play(true);
+}
 
 /* ---------------- PANEL ---------------- */
 function worstDay(c) {
@@ -64,6 +92,7 @@ function worstDay(c) {
   return { v: best, d: d3.timeDay.offset(DAY0, bi) };
 }
 function selectCity(c) {
+  stopPlay();
   state.city = c;
   chipEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === c));
   updateMap(); updatePanel(); drawMini(); drawCalendar(); drawTrend();
@@ -100,8 +129,26 @@ function renderAll() {
  layoutTrack(); drawMap(); updatePanel(); drawMini(); drawCalendar(); drawScore(); drawWind(); drawTrust();
  drawCrisis(); drawTrend(); drawExceed(); setMonth(state.month);
 }
+function setupStoryNavigation() {
+ const links = [...document.querySelectorAll('.chart-nav a')];
+ const targets = links.map(link => document.querySelector(link.getAttribute('href')));
+ let scheduled = false;
+ const update = () => {
+   scheduled = false;
+   let active = -1;
+   targets.forEach((target,i) => {if (target.getBoundingClientRect().top <= 150) active = i;});
+   if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) active = links.length - 1;
+   links.forEach((link,i) => {
+     if (i === active) link.setAttribute('aria-current','location');
+     else link.removeAttribute('aria-current');
+   });
+ };
+ addEventListener('scroll', () => { if (!scheduled) {scheduled = true; requestAnimationFrame(update);} }, {passive:true});
+ update();
+}
 function boot() {
  fillEvidence(); renderAll(); document.getElementById('loadStatus').hidden = true;
+ setupPlayback(); setupScrollMotion(); setupStoryNavigation();
  const themeButton = document.getElementById('theme');
  const themes = ['auto','light','dark'];
  themeButton.addEventListener('click', () => {

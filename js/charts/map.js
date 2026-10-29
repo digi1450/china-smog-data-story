@@ -1,3 +1,4 @@
+import { reducedMotion } from '../motion.js';
 import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js';
 import { selectCity } from '../app.js';
 
@@ -42,13 +43,13 @@ function updateMap() {
   const { cities, r } = mapSel, i = state.month;
   cities.each(function (c) {
     const v = MV[c][i], g = d3.select(this), rad = v == null ? 7 : r(v);
-    g.select('.cloud').transition().duration(300).attr('r', v == null ? 0 : rad * 1.25)
+    g.select('.cloud').transition().duration(reducedMotion() ? 0 : 600).attr('r', v == null ? 0 : rad * 1.25)
       .style('fill', v == null ? 'transparent' : `var(--b${bandOf(v)})`).style('opacity', 0.75);
-    g.select('.core').transition().duration(300).attr('r', rad)
+    g.select('.core').transition().duration(reducedMotion() ? 0 : 600).attr('r', rad)
       .style('fill', v == null ? 'transparent' : `var(--b${bandOf(v)})`).style('opacity', v == null ? 1 : 0.9)
       .style('stroke', v == null ? 'var(--ink-3)' : 'none').style('stroke-width', 1.5).style('stroke-dasharray', null);
     const sel = c === state.city;
-    g.select('.ring').transition().duration(300).attr('r', rad + 5).style('stroke', sel ? 'var(--ink)' : 'transparent').style('stroke-width', 2);
+    g.select('.ring').transition().duration(reducedMotion() ? 0 : 600).attr('r', rad + 5).style('stroke', sel ? 'var(--ink)' : 'transparent').style('stroke-width', 2);
     const side = INFO[c].side, off = rad + 9;
     g.select('.lab').attr('transform', `translate(${side === 'left' ? -off : off},-6)`)
       .selectAll('text').attr('text-anchor', side === 'left' ? 'end' : 'start');

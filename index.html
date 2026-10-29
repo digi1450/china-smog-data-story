@@ -20,35 +20,36 @@
 <div class="status wide" id="loadStatus" role="status">Loading verified station data…</div>
 <noscript><p class="status wide">Enable JavaScript to explore the charts. Read <a href="#sources">Sources &amp; reproducible method</a> below for definitions and sources.</p></noscript>
 
-<header class="hero col">
+<header class="hero wide" id="top">
   <p class="eyebrow">A data story · PM2.5 in five Chinese cities, 2010–2015</p>
-  <h1>Did China win its war on smog?</h1>
-  <p class="lede">Five monitors, six years, and the early evidence after China's September 2013 Action Plan. Explore the map, then follow Beijing from its January crisis to the first two full years after the plan. This is a station-level account through 2015, not a verdict on all of China.</p>
-<nav class="chart-nav" aria-label="Story chapters"><a href="#crisis-section">The crisis</a><a href="#trend-section">The timeline</a><a href="#h3c">The results</a><a href="#h4c">The weather check</a><a href="#sources">Sources &amp; method</a><button class="chip" id="theme" type="button">Theme: Auto</button></nav></header>
+  <div class="hero-title"><h1>Did China win its war on smog?</h1><p class="hero-meta">FIVE CITIES / SIX YEARS / ONE QUESTION</p></div>
+  <div class="hero-intro"><p class="lede">Five monitors, six years, and the early evidence after China's September 2013 Action Plan. Explore the map, then follow Beijing from its January crisis to the first two full years after the plan. This is a station-level account through 2015, not a verdict on all of China.</p><a class="explore-link" href="#explorer">Explore the changing air <span aria-hidden="true">↘</span></a></div>
+</header>
+<nav class="chart-nav wide" aria-label="Story chapters"><a href="#crisis-section">The crisis</a><a href="#trend-section">The timeline</a><a href="#results-section">The results</a><a href="#wind-section">The weather check</a><a href="#sources">Sources &amp; method</a><button class="chip" id="theme" type="button">Theme: Auto</button></nav>
 
-<section class="wide explorer" aria-label="Map explorer">
+<section class="wide explorer" id="explorer" aria-label="Map explorer">
   <div class="panel-box mapbox">
     <div class="maphead">
-      <div class="when" id="when">January 2013<small>Before the Action Plan</small></div>
+      <div class="when" id="when">May 2013<small>Before the Action Plan</small></div>
       <div class="controls" id="cityChips" role="group" aria-label="Choose a city"></div>
     </div>
     <div id="map"></div>
     <div class="legend" id="mapLegend"></div><p class="src">Monthly station mean, µg/m³. Colours show concentration bins, not monthly AQI or a citywide pollution surface. Circle size is capped at 200 µg/m³; values remain exact.</p>
     <div class="timeline">
-      <button class="play" id="play" aria-label="Play the months">▶ Play</button>
+      <div class="play-controls"><button class="play" id="play" aria-label="Play the months" aria-pressed="false">▶ Play</button><button class="chip" id="replay" type="button" aria-label="Replay from the first month">↺ Replay</button></div>
       <div class="track">
         <span class="plan" id="planMark">Action Plan</span>
-        <input type="range" id="month" min="40" max="71" value="48" aria-label="Month">
+        <input type="range" id="month" min="40" max="71" value="40" aria-label="Month">
         <div class="ticks" id="ticks"></div>
       </div>
     </div>
-    <div class="rangebar">
+    <p class="src playback-status" id="playbackStatus">May 2013–Dec 2015 · loop playback</p><div class="rangebar">
       <p class="src" id="rangeNote">Common calendar window: May 2013–Dec 2015. Gaps remain; a shared window does not guarantee complete readings.</p>
       <button class="chip" id="rangeBtn" aria-pressed="false">Show 2010–2013 too</button>
     </div>
   </div>
 
-  <aside class="panel-box" id="panel" aria-live="polite">
+  <aside class="panel-box" id="panel" aria-live="off">
     <div class="cityhead">
       <div class="cityname"><i id="pDot"></i><span class="en" id="pEn"></span></div>
       <p class="region" id="pRegion"></p>
@@ -69,25 +70,20 @@
 
 
 <section class="chapter divider" id="crisis-section" aria-labelledby="crisis-heading">
- <div class="col"><p class="eyebrow">01 / The crisis</p><h2 id="crisis-heading">Beijing, January 2013</h2>
- <p>The opening question is a concrete one: how high did the daily average rise at the U.S. Embassy monitor? Daily values reveal the episode without confusing an hourly peak with a 24-hour mean.</p></div>
+ <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">01 / The crisis</p><h2 id="crisis-heading">Beijing, January 2013</h2></div><div class="chapter-deck"><p>The opening question is a concrete one: how high did the daily average rise at the U.S. Embassy monitor? Daily values reveal the episode without confusing an hourly peak with a 24-hour mean.</p></div></div>
  <figure class="wide"><figcaption><b>One month of daily PM2.5 in Beijing</b><span>µg/m³ · each point is a day with at least 18 valid hourly observations.</span></figcaption><div class="chart" id="crisis"></div>
  <div class="legend"><span>Dashed: WHO 2005 24-hour guideline, 25 µg/m³</span><span>Dotted: WHO 2021 24-hour guideline, 15 µg/m³</span></div>
  <p class="src">WHO 2021 is a retrospective reference, not the guideline in effect in 2013. The 24-hour guideline is defined at the annual 99th percentile; counting individual exceedance days here is descriptive.</p></figure>
  <div class="col"><p class="finding" id="crisisFinding"></p></div>
 </section>
 <section class="chapter divider" id="trend-section" aria-labelledby="trend-heading">
- <div class="col"><p class="eyebrow">02 / A policy marker, not a causal boundary</p><h2 id="trend-heading">The timeline matters</h2>
- <p>The national Action Plan was issued in September 2013. Its targets ran to 2017, beyond this dataset. Beijing has the longest record here; the other U.S. posts started later. A line beginning late is missing history, not zero pollution.</p></div>
+ <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">02 / A policy marker, not a causal boundary</p><h2 id="trend-heading">The timeline matters</h2></div><div class="chapter-deck"><p>The national Action Plan was issued in September 2013. Its targets ran to 2017, beyond this dataset. Beijing has the longest record here; the other U.S. posts started later. A line beginning late is missing history, not zero pollution.</p></div></div>
  <figure class="wide"><figcaption><b>Monthly station PM2.5, 2010–2015</b><span>µg/m³ · select a city above to highlight its line. Vertical marker: September 2013, a transition month.</span></figcaption>
  <div class="legend" id="trendLegend"></div><div class="chart" id="trend"></div><p class="src">Before and after the policy marker are calendar periods, not treatment and control groups. Monthly means require at least 15 valid days. Gaps are not interpolated.</p></figure>
 </section>
 
 <section class="chapter" aria-labelledby="hs">
-  <div class="col">
-    <p class="eyebrow">Every day on record</p>
-    <h2 id="hs"><span id="stripeCity">Beijing</span>, one stripe per day</h2>
-    <p>Each stripe is one day at the selected U.S. diplomatic-post monitor. Darker means a higher daily concentration. Look for recurring seasonal patterns and grey gaps; this chart alone cannot identify their causes.</p>
+  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Every day on record</p><h2 id="hs"><span id="stripeCity">Beijing</span>, one stripe per day</h2></div><div class="chapter-deck"><p>Each stripe is one day at the selected U.S. diplomatic-post monitor. Darker means a higher daily concentration. Look for recurring seasonal patterns and grey gaps; this chart alone cannot identify their causes.</p></div>
   </div>
   <figure class="wide">
     <figcaption><b id="stripeTitle">Daily PM2.5, 2010–2015</b><span>Hover a row to read any day. Changes with the city you pick on the map.</span></figcaption>
@@ -97,11 +93,8 @@
   </figure>
 </section>
 
-<section class="chapter divider" aria-labelledby="h3c">
-  <div class="col">
-    <p class="eyebrow">Scorecard</p>
-    <h2 id="h3c">Same years, every city: 2014 against 2015</h2>
-    <p>2014 and 2015 are the first two calendar years in which all five U.S. posts have at least 325 valid days each. These are both post-plan years: the comparison describes early changes, not the policy effect. Missing days can still affect the means.</p>
+<section class="chapter divider" id="results-section" aria-labelledby="h3c">
+  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Scorecard</p><h2 id="h3c">Same years, every city: 2014 against 2015</h2></div><div class="chapter-deck"><p>2014 and 2015 are the first two calendar years in which all five U.S. posts have at least 325 valid days each. These are both post-plan years: the comparison describes early changes, not the policy effect. Missing days can still affect the means.</p></div>
   </div>
   <figure class="wide">
     <figcaption><b>Annual station PM2.5: 2014 versus 2015</b><span>µg/m³, US consulate monitors.</span></figcaption>
@@ -122,14 +115,11 @@
 </section>
 
 <section class="chapter divider" aria-labelledby="exceed-heading">
- <div class="col"><p class="eyebrow">03 / Beyond the average</p><h2 id="exceed-heading">Did high-pollution days also become rarer?</h2><p>A lower mean does not guarantee fewer extreme days. Compare the share of valid days above 150 µg/m³, and keep the missing-day counts in view.</p></div>
+ <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">03 / Beyond the average</p><h2 id="exceed-heading">Did high-pollution days also become rarer?</h2></div><div class="chapter-deck"><p>A lower mean does not guarantee fewer extreme days. Compare the share of valid days above 150 µg/m³, and keep the missing-day counts in view.</p></div></div>
  <figure class="wide"><figcaption><b>Days above 150 µg/m³: 2014 versus 2015</b><span>Share of valid days, not all calendar days. This is a concentration threshold, not an AQI label.</span></figcaption><div class="chart" id="exceed"></div><div class="table-scroll" id="exceedTable"></div><p class="src">Missing days are excluded from the percentage denominator, never treated as clean days. Different missingness may still bias comparisons.</p></figure>
 </section>
-<section class="chapter divider" aria-labelledby="h4c">
-  <div class="col">
-    <p class="eyebrow">The twist</p>
-    <h2 id="h4c">Policy or weather? A limited wind check.</h2>
-    <p>Wind composition can change a pollution average. Here we compare Beijing in two equal calendar windows: 2011–2012 and 2014–2015, leaving 2013 as a transition year. Grouping days by wind is a useful check, but it does not hold all weather conditions constant.</p>
+<section class="chapter divider" id="wind-section" aria-labelledby="h4c">
+  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">The twist</p><h2 id="h4c">Policy or weather? A limited wind check.</h2></div><div class="chapter-deck"><p>Wind composition can change a pollution average. Here we compare Beijing in two equal calendar windows: 2011–2012 and 2014–2015, leaving 2013 as a transition year. Grouping days by wind is a useful check, but it does not hold all weather conditions constant.</p></div>
   </div>
   <figure class="wide">
     <figcaption><b>Beijing daily PM2.5 by dominant recorded wind category</b><span>Mean of daily averages, µg/m³. Right column: share of days with that wind.</span></figcaption>
@@ -147,10 +137,7 @@
 </section>
 
 <section class="chapter divider" aria-labelledby="h5c">
-  <div class="col">
-    <p class="eyebrow">Can we trust the numbers?</p>
-    <h2 id="h5c">Do nearby monitors tell a similar story?</h2>
-    <p>We keep one U.S. diplomatic-post series per city as a consistent source. Nearby Chinese station columns provide a cross-check over overlapping valid days. Agreement in timing is useful evidence, but different locations need not record identical concentrations.</p>
+  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Can we trust the numbers?</p><h2 id="h5c">Do nearby monitors tell a similar story?</h2></div><div class="chapter-deck"><p>We keep one U.S. diplomatic-post series per city as a consistent source. Nearby Chinese station columns provide a cross-check over overlapping valid days. Agreement in timing is useful evidence, but different locations need not record identical concentrations.</p></div>
   </div>
   <figure class="wide">
     <figcaption><b>Same day, two monitors</b><span>Each dot is one paired valid day (up to 400 plotted); statistics use every paired day. The diagonal indicates equal readings.</span></figcaption>
@@ -164,11 +151,8 @@
   </div>
 </section>
 
-<section class="chapter divider" aria-labelledby="h6c">
-  <div class="col">
-    <p class="eyebrow">Verdict</p>
-    <h2 id="h6c">Early improvement, an unfinished answer</h2>
-    <p id="verdict"></p><p>The dataset stops in 2015, two years before the national plan's deadline. Five individual monitors cannot represent all of China, and a before/after pattern cannot establish causality. The defensible answer is early, uneven improvement at these monitors—not a final national victory.</p>
+<section class="chapter divider verdict-section" aria-labelledby="h6c">
+  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Verdict</p><h2 id="h6c">Early improvement, an unfinished answer</h2></div><div class="chapter-deck"><p id="verdict"></p><p>The dataset stops in 2015, two years before the national plan's deadline. Five individual monitors cannot represent all of China, and a before/after pattern cannot establish causality. The defensible answer is early, uneven improvement at these monitors—not a final national victory.</p></div>
     <p class="eyebrow" style="margin-top:10px">What this means for Thailand</p>
     <div class="lessons">
       <div class="lesson"><b>Measure first</b><p>Publish consistent station records and missing-data coverage so people can assess a trend. This is a practical lesson, not an estimated policy effect in Thailand.</p></div>
@@ -179,23 +163,14 @@
 </section>
 
 <section class="chapter divider" aria-labelledby="coverage-heading">
- <div class="col"><p class="eyebrow">Evidence boundary</p><h2 id="coverage-heading">What did each monitor actually cover?</h2><p>The files contain hourly timestamps for 2010–2015, but many PM2.5 entries are NA. A timestamp is not a measurement. Only Beijing spans the entire six-year window.</p></div>
+ <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Evidence boundary</p><h2 id="coverage-heading">What did each monitor actually cover?</h2></div><div class="chapter-deck"><p>The files contain hourly timestamps for 2010–2015, but many PM2.5 entries are NA. A timestamp is not a measurement. Only Beijing spans the entire six-year window.</p></div></div>
  <figure class="wide"><figcaption><b>U.S. post data availability</b><span>Daily coverage requires at least 18 valid hourly observations.</span></figcaption><div class="table-scroll" id="coverageTable"></div></figure>
 </section>
-<footer class="col" id="sources">
- <div class="sources"><p class="eyebrow">Sources &amp; reproducible method</p>
- <p><b>Measurements:</b> <a href="https://archive.ics.uci.edu/dataset/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities" target="_blank" rel="noopener">UCI dataset 394</a> (Chen, 2016; CC BY 4.0), also distributed on <a href="https://www.kaggle.com/uciml/pm25-data-for-five-chinese-cities" target="_blank" rel="noopener">Kaggle</a>. Calculations here use the UCI download, not an unverified Kaggle copy.</p>
- <p><b>Research context:</b> <a href="https://www.songxichen.com/Uploads/Files/Publication/Liang-etal-Chen-JGR-2016.pdf" target="_blank" rel="noopener">Liang et al. (2016), doi:10.1002/2016JD024877</a>. Their full meteorological adjustment is not reproduced here.</p>
- <p><b>Policy:</b> <a href="https://www.nea.gov.cn/2013-09/13/c_132716820.htm" target="_blank" rel="noopener">State Council Action Plan, September 2013</a>. Regional 2017 PM2.5 reduction goals versus 2012: Beijing–Tianjin–Hebei ~25%, Yangtze River Delta ~20%, Pearl River Delta ~15%; Beijing annual concentration ~60 µg/m³. These are not five identical city targets.</p>
- <p><b>Health references:</b> <a href="https://www.who.int/publications/i/item/9789240034228/" target="_blank" rel="noopener">WHO 2021 guidelines</a> and <a href="https://www.ncbi.nlm.nih.gov/books/NBK574591/table/ch3.tab26/" target="_blank" rel="noopener">WHO 2005/2021 comparison table</a>. Annual PM2.5: 10/5; 24-hour: 25/15 µg/m³. The 24-hour recommendation is evaluated at the annual 99th percentile.</p>
- <p><b>Aggregation:</b> daily means require ≥18 valid hours; monthly means require ≥15 valid days; annual means weight all valid days equally. These are project completeness rules, not a claim of regulatory certification. No missing values are filled. Values are rounded for display only.</p>
- <p><b>Map:</b> Natural Earth via world-atlas.</p>
- <p><b>Sensitivity checks:</b> the matched-calendar comparison uses only month/day pairs with valid readings in both 2014 and 2015. Beijing's month × wind check keeps groups with at least five eligible days per period, then applies identical weights to both periods: the average of each group's share of retained days in each period. Neither check isolates a policy effect.</p>
- <p><b>Station comparison:</b> both monitors must independently pass the daily completeness rule. Correlation, signed bias and MAE use all paired valid days; the plot displays up to 400 sampled dates. The duplicated Guangzhou column is excluded. File hashes and calculation inputs are included in the downloaded data.</p>
- <p><a href="data/processed/analysis.json" download>Download calculated data</a> · <a href="scripts/prepare_data.py" download>Download calculation script</a></p>
- <p class="note">Scope: historical observations through December 2015. No claims about current air quality, national representativeness, target attainment, or causal policy impact.</p>
+<footer class="wide" id="sources">
+ <div class="sources"><div class="sources-heading"><p class="eyebrow">Behind the charts</p><h2>Sources &amp; method</h2></div><div class="source-columns"><section aria-labelledby="references-heading"><h3 id="references-heading">References</h3><p><b>Measurements:</b> <a href="https://archive.ics.uci.edu/dataset/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities" target="_blank" rel="noopener">UCI dataset 394</a> (Chen, 2016; CC BY 4.0), also distributed on <a href="https://www.kaggle.com/uciml/pm25-data-for-five-chinese-cities" target="_blank" rel="noopener">Kaggle</a>. Calculations use the original UCI download.</p><p><b>Research context:</b> <a href="https://www.songxichen.com/Uploads/Files/Publication/Liang-etal-Chen-JGR-2016.pdf" target="_blank" rel="noopener">Liang et al. (2016), doi:10.1002/2016JD024877</a>. Their full meteorological adjustment is not reproduced here.</p><p><b>Policy:</b> <a href="https://www.nea.gov.cn/2013-09/13/c_132716820.htm" target="_blank" rel="noopener">State Council Action Plan, September 2013</a>. Regional 2017 PM2.5 reduction goals versus 2012: Beijing–Tianjin–Hebei ~25%, Yangtze River Delta ~20%, Pearl River Delta ~15%; Beijing annual concentration ~60 µg/m³. These are not five identical city targets.</p><p><b>Health references:</b> <a href="https://www.who.int/publications/i/item/9789240034228/" target="_blank" rel="noopener">WHO 2021 guidelines</a> and <a href="https://www.ncbi.nlm.nih.gov/books/NBK574591/table/ch3.tab26/" target="_blank" rel="noopener">WHO 2005/2021 comparison table</a>. Annual PM2.5: 10/5; 24-hour: 25/15 µg/m³. The 24-hour recommendation is evaluated at the annual 99th percentile.</p><p><b>Map:</b> Natural Earth via world-atlas.</p></section><section aria-labelledby="method-heading"><h3 id="method-heading">How the data are read</h3><p><b>Aggregation:</b> daily means require ≥18 valid hours; monthly means require ≥15 valid days; annual means weight all valid days equally. These are project completeness rules, not a claim of regulatory certification. No missing values are filled. Values are rounded for display only.</p><p><b>Sensitivity checks:</b> the matched-calendar comparison uses only month/day pairs with valid readings in both 2014 and 2015. Beijing's month × wind check keeps groups with at least five eligible days per period, then applies identical weights to both periods: the average of each group's share of retained days in each period. Neither check isolates a policy effect.</p><p><b>Station comparison:</b> both monitors must independently pass the daily completeness rule. Correlation, signed bias and MAE use all paired valid days; the plot displays up to 400 sampled dates. The duplicated Guangzhou column is excluded. File hashes and calculation inputs are included in the downloaded data.</p></section></div><div class="source-downloads"><p><a href="data/processed/analysis.json" download>Download calculated data</a> · <a href="scripts/prepare_data.py" download>Download calculation script</a></p><p class="note">Scope: historical observations through December 2015. No claims about current air quality, national representativeness, target attainment, or causal policy impact.</p></div>
  </div>
 </footer>
 
+<a class="back-top" href="#explorer" aria-label="Back to the map explorer">↑ Back to explorer</a>
 </body>
 </html>

@@ -4,6 +4,10 @@ An interactive data visualization exploring PM2.5 readings in Beijing, Shenyang,
 
 The website is hosted on GitHub Pages. It is built with HTML, CSS, JavaScript and D3.js, using precomputed JSON data.
 
+## Explore the story
+
+The map plays through the shared monthly window in a loop. Play/Pause, Replay and the timeline allow manual control; selecting a city or month pauses playback. Playback also pauses when the explorer is out of view or the browser tab is hidden. Chart introductions play once as they enter view, and the timeline legend supports city selection and highlighting. Automatic playback and entrance animations respect the device's reduced-motion preference.
+
 ## Run locally
 
 Serve the project directory with any static HTTP server. For example, with Python 3 installed:
