@@ -1,14 +1,14 @@
-import { createPlayback } from './playback.js?v=20261029-2';
-import { setupScrollMotion, setupDisclosureMotion, reducedMotion } from './motion.js?v=20261029-2';
-import { setupPresentation, navigateToScene } from './presentation.js?v=20261029-2';
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from './core.js?v=20261029-2';
-import { drawMap,updateMap } from './charts/map.js?v=20261029-2';
-import { drawMini,updateMiniMarker } from './charts/mini.js?v=20261029-2';
-import { drawCalendar } from './charts/calendar.js?v=20261029-2';
-import { drawScore } from './charts/score.js?v=20261029-2';
-import { drawWind } from './charts/wind.js?v=20261029-2';
-import { drawTrust } from './charts/trust.js?v=20261029-2';
-import { drawCrisis,drawTrend,drawExceed,fillEvidence } from './charts/story.js?v=20261029-2';
+import { createPlayback } from './playback.js?v=20261030-3';
+import { setupScrollMotion, setupDisclosureMotion, reducedMotion } from './motion.js?v=20261030-3';
+import { setupPresentation, navigateToScene } from './presentation.js?v=20261030-3';
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from './core.js?v=20261030-3';
+import { drawMap,updateMap } from './charts/map.js?v=20261030-3';
+import { drawMini,updateMiniMarker } from './charts/mini.js?v=20261030-3';
+import { drawCalendar } from './charts/calendar.js?v=20261030-3';
+import { drawScore } from './charts/score.js?v=20261030-3';
+import { drawWind } from './charts/wind.js?v=20261030-3';
+import { drawTrust } from './charts/trust.js?v=20261030-3';
+import { drawCrisis,drawTrend,drawExceed,fillEvidence } from './charts/story.js?v=20261030-3';
 
 const bandLegendHTML = BANDS.map((b,i) => `<span><i style="background:var(--b${i})"></i>${b.r}</span>`).join('');
 document.getElementById('bandLegend').innerHTML = bandLegendHTML;
@@ -77,13 +77,11 @@ function setupPlayback() {
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(([entry]) => {
       playback.suspend('offscreen', !entry.isIntersecting);
-      document.querySelector('.back-top').classList.toggle('is-visible', !entry.isIntersecting && entry.boundingClientRect.top < 0);
     }, {threshold:0});
     observer.observe(document.querySelector('#explorer'));
   }
   document.addEventListener('visibilitychange', () => playback.suspend('hidden',document.hidden));
   matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', e => {if (e.matches) stopPlay();});
-  if (!reducedMotion()) playback.play(true);
 }
 
 /* ---------------- PANEL ---------------- */
@@ -97,6 +95,9 @@ function selectCity(c) {
   state.city = c;
   chipEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === c));
   updateMap(); updatePanel(); drawMini(); drawCalendar(); drawTrend();
+  if (!reducedMotion()) document.querySelector('#panel .cityhead').animate(
+    [{opacity:.3, transform:'translateY(5px)'},{opacity:1, transform:'translateY(0)'}],
+    {duration:280, easing:'ease-out'});
 }
 function updatePanelMonth() {
   const c = state.city, v = MV[c][state.month];
@@ -120,8 +121,8 @@ function updatePanel() {
   const a14 = annualOf(c, 2014);
   const chg = (a15.mean / a14.mean - 1) * 100;
   m.innerHTML = `<div class="top"><span>Station change, 2014 → 2015</span><b>${chg > 0 ? '+' : ''}${fmt(chg)}%</b></div>
-    <div class="top"><span>${fmt(a14.mean)} → ${fmt(a15.mean)} µg/m³ · ${a14.days}/${a15.days} valid days</span></div>
-    <details class="context-details"><summary>Policy context</summary><p class="policy-note"><b>Not a station target:</b> ${I.policy} Data end in 2015; target attainment is not evaluated.</p></details>`;
+    <div class="top"><span>${fmt(a14.mean)} → ${fmt(a15.mean)} µg/m³ · ${a14.days}/${a15.days} valid days</span></div>`;
+  document.getElementById('stationPolicy').innerHTML = `<b>Policy context:</b> ${I.policy} Data end in 2015; target attainment is not evaluated.`;
   document.getElementById('why').innerHTML = I.why;
 }
 
@@ -166,25 +167,6 @@ function setupStoryNavigation() {
  };
  openIncomingSection();
  addEventListener('hashchange', openIncomingSection);
- const links = [...document.querySelectorAll('.chart-nav a')];
- const update = event => {
-   // The deck owns the current chapter; transformed positions are in flight
-   // when storychange fires and cannot identify the destination reliably.
-   const id = event?.detail?.id || document.querySelector('.story-scene.is-current')?.id;
-   const scenes = [...document.querySelectorAll('.story-scene')];
-   const position = scenes.findIndex(scene => scene.id === id);
-   let current;
-   links.forEach(link => {
-     const index = scenes.indexOf(targetFor(link.getAttribute('href')));
-     if (index >= 0 && index <= position) current = link;
-   });
-   links.forEach(link => {
-     if (link === current) link.setAttribute('aria-current','location');
-     else link.removeAttribute('aria-current');
-   });
- };
- document.addEventListener('storychange', update);
- update();
 }
 function boot() {
  fillEvidence(); setupPresentation(); renderAll(); document.getElementById('loadStatus').hidden = true;
@@ -197,8 +179,12 @@ function boot() {
    else document.documentElement.dataset.theme = theme;
    themeButton.textContent = `Theme: ${theme[0].toUpperCase()+theme.slice(1)}`;
  });
- let rt, lastW = innerWidth;
- addEventListener('resize', () => { if (innerWidth === lastW) return; lastW=innerWidth; clearTimeout(rt); rt=setTimeout(renderAll,150); });
+ let rt, lastW = innerWidth, lastH = innerHeight;
+ addEventListener('resize', () => {
+   if (innerWidth === lastW && (innerWidth < 1000 || innerHeight === lastH)) return;
+   lastW=innerWidth; lastH=innerHeight;
+   clearTimeout(rt); rt=setTimeout(renderAll,150);
+ });
  addEventListener('scroll',hideTip,{passive:true});
  document.addEventListener('storychange',hideTip);
 }

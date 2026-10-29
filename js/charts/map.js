@@ -1,13 +1,19 @@
-import { reducedMotion } from '../motion.js?v=20261029-2';
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261029-2';
-import { selectCity } from '../app.js?v=20261029-2';
+import { reducedMotion } from '../motion.js?v=20261030-3';
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261030-3';
+import { selectCity } from '../app.js?v=20261030-3';
 
 let mapSel = null;
 function drawMap() {
-  const W = widthOf('map'), H = Math.round(Math.min(W * .78, document.documentElement.classList.contains('deck-ready') && innerWidth >= 1000 ? innerHeight * .29 : Infinity));
+  const immersive = document.documentElement.classList.contains('deck-ready') && innerWidth >= 1000 && innerHeight >= 650;
+  const W = widthOf('map'), H = immersive ? innerHeight : Math.round(W * .86);
   const svg = svgFor('map', W, H);
   const china = GEO.features.find(f => f.properties.n === 'China');
-  const proj = d3.geoConicConformal().parallels([25, 47]).rotate([-105, 0]).fitExtent([[W*0.03, H*0.04], [W*(W < 500 ? 0.8 : 0.9), H*0.96]], china);
+  const cityExtent = {type:'MultiPoint', coordinates:CITIES.map(c => [INFO[c].lon, INFO[c].lat])};
+  const labelSpace = W < 500 ? 96 : 110;
+  const proj = d3.geoConicConformal().parallels([25, 47]).rotate([-115, 0])
+    .fitExtent(immersive
+      ? [[Math.max(140, W * .13), Math.max(210, H * .26)], [W - 480, H - 300]]
+      : [[labelSpace, 40], [W - labelSpace, H - 40]], cityExtent);
   const path = d3.geoPath(proj);
   svg.append('rect').attr('width', W).attr('height', H).style('fill', 'var(--sea)');
   svg.append('g').selectAll('path').data(GEO.features.filter(f => f.properties.n !== 'China')).join('path')
@@ -17,7 +23,7 @@ function drawMap() {
   const defs = svg.append('defs');
   defs.append('filter').attr('id', 'haze').attr('x', '-80%').attr('y', '-80%').attr('width', '260%').attr('height', '260%')
     .append('feGaussianBlur').attr('stdDeviation', W < 500 ? 7 : 11);
-  const r = d3.scaleSqrt().domain([0, 200]).range([4, W < 500 ? 26 : 38]).clamp(true);
+  const r = d3.scaleSqrt().domain([0, 200]).range([4, immersive ? 48 : W < 500 ? 26 : 38]).clamp(true);
   const g = svg.append('g');
   const cities = g.selectAll('g').data(CITIES).join('g').attr('class', 'city-g')
     .attr('transform', c => `translate(${proj([INFO[c].lon, INFO[c].lat])})`)

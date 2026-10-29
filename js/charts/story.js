@@ -1,6 +1,6 @@
-import { introduceChart, revealLine } from '../motion.js?v=20261029-2';
-import { selectCity } from '../app.js?v=20261029-2';
-import {D,CITIES,cvar,state,MV,MONTHS,PLAN_I,DAY0,fmt,svgFor,widthOf,showTip,hideTip,annualOf,fmtDate} from '../core.js?v=20261029-2';
+import { introduceChart, revealLine } from '../motion.js?v=20261030-3';
+import { selectCity } from '../app.js?v=20261030-3';
+import {D,CITIES,cvar,state,MV,MONTHS,PLAN_I,DAY0,fmt,svgFor,widthOf,showTip,hideTip,annualOf,fmtDate} from '../core.js?v=20261030-3';
 
 function drawCrisis() {
   const W=widthOf('crisis'), H=300, m={l:48,r:18,t:36,b:32};

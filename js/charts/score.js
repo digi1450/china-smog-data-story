@@ -1,6 +1,6 @@
-import { reducedMotion } from '../motion.js?v=20261029-2';
-let revealed = false;
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261029-2';
+import { reducedMotion } from '../motion.js?v=20261030-3';
+let revealed = true;
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261030-3';
 
 function drawScore() {
   const W = widthOf('score'), narrow = W < 560, m = {t:8, r: narrow ? 8 : 230, b:26, l: narrow ? 8 : 96}, rh = narrow ? 70 : 54;
@@ -41,10 +41,11 @@ function drawScore() {
 function applyStage(animate) {
   const svg = d3.select('#score svg');
   const duration = animate && !reducedMotion() ? 850 : 0;
-  document.getElementById('results-section').classList.toggle('score-baseline', !revealed);
-  svg.selectAll('.score-link').interrupt('reveal').transition('reveal').duration(duration)
+  const links = svg.selectAll('.score-link').interrupt('reveal');
+  const endpoints = svg.selectAll('.score-end').interrupt('reveal');
+  (duration ? links.transition('reveal').duration(duration) : links)
     .attr('x2', function(){return revealed ? this.dataset.end : this.dataset.start;});
-  svg.selectAll('.score-end').interrupt('reveal').transition('reveal').duration(duration)
+  (duration ? endpoints.transition('reveal').duration(duration) : endpoints)
     .attr('cx', function(){return revealed ? this.dataset.end : this.dataset.start;});
   svg.selectAll('.score-after, .score-end, .score-link').style('opacity', revealed ? 1 : 0)
     .style('pointer-events', revealed ? null : 'none').attr('visibility', revealed ? null : 'hidden').attr('aria-hidden', String(!revealed));
@@ -52,15 +53,17 @@ function applyStage(animate) {
     return `${this.dataset.city}, 2014: ${this.dataset.base}${revealed ? ', 2015: '+this.dataset.after : ''} micrograms per cubic metre`;
   });
   const button = document.getElementById('scoreReveal');
-  button.textContent = revealed ? '↺ Back to 2014' : 'Reveal 2015 →';
-  button.setAttribute('aria-pressed', String(revealed));
+  button.textContent = '↺ Replay change';
   document.getElementById('scoreStage').textContent = revealed
     ? 'Three station means fell. Two rose slightly. Hover or focus a city to follow its change.'
     : 'Start with 2014. Reveal the next year to see what changed.';
 }
 
-export function toggleScoreReveal() {
-  revealed = !revealed;
+export function replayScoreReveal() {
+  if (reducedMotion()) return;
+  revealed = false;
+  applyStage(false);
+  revealed = true;
   applyStage(true);
 }
 

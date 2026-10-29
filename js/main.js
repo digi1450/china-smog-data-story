@@ -1,5 +1,5 @@
 // Load the application and report initialization failures.
-import('./app.js?v=20261029-2').then(({boot}) => boot()).catch(error => {
+import('./app.js?v=20261030-3').then(({boot}) => boot()).catch(error => {
   console.error(error);
   const el = document.getElementById('loadStatus');
   el.hidden = false;

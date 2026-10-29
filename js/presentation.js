@@ -1,21 +1,21 @@
-import { D, DAY0, fmt, bandOf } from './core.js?v=20261029-2';
-import { reducedMotion } from './motion.js?v=20261029-2';
-import { createWheelIntent } from './wheel-intent.js?v=20261029-2';
-import { toggleScoreReveal } from './charts/score.js?v=20261029-2';
+import { D, DAY0, fmt, bandOf } from './core.js?v=20261030-3';
+import { reducedMotion } from './motion.js?v=20261030-3';
+import { createWheelIntent } from './wheel-intent.js?v=20261030-3';
+import { replayScoreReveal } from './charts/score.js?v=20261030-3';
 
 const chapters = [
   ['top', 'The question', '2010–2015'],
   ['explorer', 'Five cities', 'Explore'],
   ['crisis-section', 'The crisis', 'Jan 2013'],
-  ['trend-section', 'The timeline', '2010–2015'],
-  ['daily-section', 'Every day', '2010–2015'],
   ['results-section', 'The change', '2014 → 2015'],
   ['extremes-section', 'The extremes', '2014 → 2015'],
   ['wind-section', 'The weather', 'Before / after'],
-  ['trust-section', 'The cross-check', 'Paired days'],
   ['verdict-section', 'The answer', 'Through 2015'],
-  ['coverage-section', 'Data coverage', 'The record'],
-  ['sources', 'Sources & method', 'References']
+  ['trend-section', 'Q&A · The timeline', '2010–2015'],
+  ['daily-section', 'Q&A · Every day', '2010–2015'],
+  ['trust-section', 'Q&A · The cross-check', 'Paired days'],
+  ['coverage-section', 'Q&A · Data coverage', 'The record'],
+  ['sources', 'Q&A · Sources & method', 'References']
 ];
 
 let navigate = () => false;
@@ -141,7 +141,7 @@ export function setupPresentation() {
     if (event.key !== 'Home' && event.key !== 'End' && canScroll(scenes[active], direction)) return;
     event.preventDefault(); go(index);
   });
-  document.getElementById('scoreReveal').addEventListener('click', toggleScoreReveal);
+  document.getElementById('scoreReveal').addEventListener('click', replayScoreReveal);
   drawFingerprint(); update(true);
 }
 

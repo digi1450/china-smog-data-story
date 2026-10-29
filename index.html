@@ -8,9 +8,9 @@
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
- <link rel="stylesheet" href="css/style.css?v=20261029-2">
+ <link rel="stylesheet" href="css/style.css?v=20261030-3">
  <script defer src="assets/vendor/d3.v7.9.0.min.js"></script>
- <script type="module" src="js/main.js?v=20261029-2"></script>
+ <script type="module" src="js/main.js?v=20261030-3"></script>
 </head>
 <body>
 
@@ -30,27 +30,29 @@
     <span class="air-record-caption">Each bar is one daily PM2.5 mean. Follow the record. <span aria-hidden="true">↗</span></span>
   </a>
 </header>
-<nav class="chart-nav wide" aria-label="Story chapters"><a href="#crisis-section">The crisis</a><a href="#trend-section">The timeline</a><a href="#results-section">The results</a><a href="#wind-section">The weather check</a><a href="#sources">Sources &amp; method</a><button class="chip" id="theme" type="button">Theme: Auto</button></nav>
+<header class="chart-nav wide"><span class="story-brand">CHINA / THE AIR RECORD</span><button class="chip" id="theme" type="button">Theme: Auto</button></header>
 
 <section class="wide explorer" id="explorer" aria-label="Map explorer">
   <div class="panel-box mapbox">
     <div class="maphead">
-      <div class="when" id="when">May 2013<small>Before the Action Plan</small></div>
+      <div class="when" id="when">January 2014<small>After the plan was issued</small></div>
       <div class="controls" id="cityChips" role="group" aria-label="Choose a city"></div>
     </div>
     <div id="map"></div>
-    <div class="legend" id="mapLegend"></div><details class="context-details"><summary>Reading the map · µg/m³</summary><p class="src">Monthly station mean, µg/m³. Colours show concentration bins, not monthly AQI or a citywide pollution surface. Circle size is capped at 200 µg/m³; values remain exact.</p></details>
+    <div class="map-dock">
+    <div class="legend" id="mapLegend"></div><details class="context-details map-key"><summary>Reading the map · µg/m³</summary><p class="src">Monthly station mean, µg/m³. Colours show concentration bins, not monthly AQI or a citywide pollution surface. Circle size is capped at 200 µg/m³; values remain exact.</p></details>
     <div class="timeline">
       <div class="play-controls"><button class="play" id="play" aria-label="Play the months" aria-pressed="false">▶ Play</button><button class="chip" id="replay" type="button" aria-label="Replay from the first month">↺ Replay</button></div>
       <div class="track">
         <span class="plan" id="planMark">Action Plan</span>
-        <input type="range" id="month" min="40" max="71" value="40" aria-label="Month">
+        <input type="range" id="month" min="40" max="71" value="48" aria-label="Month">
         <div class="ticks" id="ticks"></div>
       </div>
     </div>
-    <p class="src playback-status" id="playbackStatus">May 2013–Dec 2015 · loop playback</p><div class="rangebar">
+    <p class="src playback-status" id="playbackStatus">Paused · select a month or press Play to explore</p><div class="rangebar">
       <details class="context-details"><summary>About the date range</summary><p class="src" id="rangeNote">Common calendar window: May 2013–Dec 2015. Gaps remain; a shared window does not guarantee complete readings.</p></details>
       <button class="chip" id="rangeBtn" aria-pressed="false">Show 2010–2013 too</button>
+    </div>
     </div>
   </div>
 
@@ -61,15 +63,18 @@
     </div>
     <div class="stats">
       <div class="stat"><span class="k" id="sMonthK">This month</span><span class="v" id="sMonth">–</span><span class="s" id="sMonthS"></span></div>
-      <div class="stat"><span class="k">2015 station mean</span><span class="v" id="s2015">–</span><span class="s" id="s2015S"></span></div>
-      <div class="stat"><span class="k">Highest valid daily mean</span><span class="v" id="sWorst">–</span><span class="s" id="sWorstS"></span></div>
+      <div class="stat"><span class="k">2015 station mean</span><span class="v" id="s2015">–</span><span class="s">µg/m³</span></div>
     </div>
     <div class="meter" id="meter"></div>
     <div>
-      <p class="src" style="margin-bottom:4px">Monthly PM2.5, µg/m³ · select a month in the full range to jump</p>
+      <p class="src" style="margin-bottom:4px">Monthly PM2.5 · µg/m³ · select to jump</p>
       <div class="chart" id="mini"></div>
     </div>
-    <details class="context-details"><summary>About this station</summary><p class="why" id="why"></p></details>
+    <details class="context-details station-details"><summary>Station details</summary>
+      <div class="stat"><span class="k">Highest valid daily mean</span><span class="v" id="sWorst">–</span><span class="s" id="sWorstS"></span></div>
+      <p class="src" id="s2015S"></p>
+      <p class="policy-note" id="stationPolicy"></p><p class="why" id="why"></p>
+    </details>
   </aside>
 </section>
 
@@ -109,8 +114,8 @@
       <span><i style="background:var(--grid)"></i>WHO 2021 annual reference: 5</span>
     </div>
     <div class="comparison-controls" role="group" aria-label="Comparison reveal">
-      <button type="button" class="chip" id="scoreReveal" aria-pressed="false" aria-controls="score">Reveal 2015 →</button>
-      <span class="src" id="scoreStage" role="status">Start with 2014. Reveal the next year to see what changed.</span>
+      <button type="button" class="chip" id="scoreReveal" aria-controls="score">↺ Replay change</button>
+      <span class="src" id="scoreStage" role="status">Three station means fell. Two rose slightly.</span>
     </div>
     <div class="chart" id="score"></div>
     <p class="src">Sorted by percentage change. Means weight valid days equally; missing days are excluded. The WHO reference is retrospective. Policy targets are context, not station-level pass/fail tests.</p>
@@ -181,6 +186,5 @@
  </div>
 </footer>
 
-<a class="back-top" href="#explorer" aria-label="Back to the map explorer">↑ Back to explorer</a>
 </body>
 </html>

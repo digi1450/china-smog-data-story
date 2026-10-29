@@ -210,6 +210,7 @@ body { padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px)); }
 .chart-nav a { text-decoration:none; padding-block:4px; }
 .chart-nav a:hover, .chart-nav a[aria-current="location"] { color:var(--ink); text-decoration:underline; text-underline-offset:5px; }
 .chart-nav #theme { margin-left:auto; }
+.story-brand { font:10px var(--f-mono); letter-spacing:.08em; color:var(--ink-3); }
 .explorer { grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:24px; margin-bottom:56px; }
 .panel-box { padding:24px; border-radius:12px; }
 .mapbox { padding:20px; }
@@ -367,9 +368,6 @@ details[data-opening] { overflow:hidden; }
 .evidence-body .note { font-size:14px; }
 .comparison-controls { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
 #scoreReveal { border-color:var(--accent); color:var(--accent); min-width:150px; justify-content:center; padding:9px 15px; }
-#scoreReveal[aria-pressed="true"] { background:var(--accent); color:var(--bg); }
-.score-baseline #scoreFinding { display:none; }
-.score-baseline #score .score-after { opacity:0; }
 .explorer.story-scene { min-height:calc(100svh - 76px); align-content:center; padding-block:26px 76px; margin-bottom:0; }
 #sources.story-scene { padding-bottom:100px; }
 .back-top { display:none; }
@@ -459,7 +457,6 @@ html.deck-ready, .deck-ready body { height:100%; overflow:hidden; scroll-behavio
 @media(max-width:760px) {
  .deck-ready .chart-nav { gap:8px; justify-content:space-between; padding-block:9px; }
  .deck-ready .chart-nav a { display:none; }
- .deck-ready .chart-nav::before { content:'CHINA / THE AIR RECORD'; font:10px var(--f-mono); letter-spacing:.08em; color:var(--ink-3); }
  .deck-ready .chart-nav #theme { margin-left:auto; }
  .deck-ready .story-deck > .story-scene { padding-top:74px; padding-bottom:92px; }
 }
@@ -485,3 +482,40 @@ html.deck-ready, .deck-ready body { height:100%; overflow:hidden; scroll-behavio
  overflow-anchor:none;
 }
 .deck-ready .disclosure-anchored > figure { align-self:start; }
+
+/* The explorer shares one map canvas; its controls float above the geography. */
+.map-dock { display:grid; gap:10px; min-width:0; }
+#panel .stats { grid-template-columns:1.3fr 1fr; align-items:start; }
+#panel .stats > .stat:first-child .v { font-size:52px; }
+#panel .station-details .stat { margin-block:12px; }
+#panel .station-details p + p { margin-top:12px; }
+@media(min-width:1000px) and (min-height:650px) {
+ .deck-ready #explorer { display:block; padding:0; overflow:hidden; }
+ .deck-ready #explorer .mapbox { position:absolute; inset:0; display:block; padding:0; border:0; border-radius:0; background:transparent; }
+ .deck-ready #map { position:absolute; inset:0; height:100%; }
+ .deck-ready #explorer #map svg { height:100%; max-height:none; border-radius:0; }
+ .deck-ready #explorer .maphead { position:absolute; z-index:2; top:84px; left:max(32px,calc((100vw - var(--page)) / 2)); width:calc(100% - 480px); gap:18px; pointer-events:none; }
+ .deck-ready #explorer .maphead #cityChips { pointer-events:auto; }
+ .deck-ready #explorer .when { min-height:0; font-size:clamp(36px,4vw,62px); text-shadow:0 2px 16px var(--bg); }
+ .deck-ready #explorer .when small { font-size:12px; margin-top:10px; }
+ .deck-ready #explorer #panel { position:absolute; z-index:3; top:88px; right:max(48px,calc((100vw - var(--page)) / 2)); width:332px; max-height:calc(100% - 335px); overflow-y:auto; background:var(--surface); box-shadow:0 12px 48px #00000022; border-radius:16px; padding:14px; gap:8px; }
+ .deck-ready #panel .cityname .en { font-size:30px; }
+ .deck-ready #panel .stat .v { font-size:28px; }
+ .deck-ready #panel .stat .k { min-height:0; }
+ .deck-ready #panel .stats > .stat:first-child .v { font-size:44px; }
+ .deck-ready #panel #mini svg { max-height:none; }
+ .deck-ready #panel .region { font-size:10px; }
+ .deck-ready #panel .src { font-size:10px; }
+ .deck-ready #explorer .map-dock { position:absolute; z-index:4; bottom:86px; left:max(32px,calc((100vw - var(--page)) / 2)); right:max(48px,calc((100vw - var(--page)) / 2)); padding:14px 18px; border:1px solid var(--rule); border-radius:14px; background:var(--surface); box-shadow:0 8px 32px #00000018; gap:8px; }
+ .deck-ready .map-dock .legend { margin:0; font-size:10px; padding-right:175px; }
+ .deck-ready .map-dock .map-key { position:absolute; top:12px; right:18px; font-size:10px; }
+ .deck-ready .map-dock .map-key[open] { width:300px; padding:14px; top:auto; bottom:calc(100% + 8px); background:var(--surface); border:1px solid var(--rule); border-radius:10px; }
+ .deck-ready .map-dock .timeline { grid-template-columns:auto minmax(0,1fr); gap:22px; }
+ .deck-ready .map-dock .playback-status { margin:0; font-size:10px; }
+ .deck-ready .map-dock .rangebar { position:absolute; right:18px; bottom:12px; gap:14px; font-size:10px; }
+ .deck-ready .map-dock .rangebar details[open] { position:absolute; right:0; bottom:calc(100% + 12px); width:280px; padding:14px; border-radius:10px; border:1px solid var(--rule); background:var(--surface); }
+}
+@media(max-width:999px) {
+ #explorer #panel { border-radius:14px; }
+ #explorer .map-dock { margin-top:12px; }
+}
