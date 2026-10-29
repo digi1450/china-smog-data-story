@@ -1,82 +1,80 @@
 # Did China Win Its War on Smog?
 
-An English-language, buildless D3 data story about early PM2.5 changes at five U.S. diplomatic-post monitors in China, 2010–2015. The supplied prototype's typography, colours, map explorer and chart layout are retained. This repository contains the source and reproducible data pipeline; the website has not been deployed.
+An interactive data visualization exploring PM2.5 readings in Beijing, Shenyang, Chengdu, Shanghai and Guangzhou from 2010 to 2015. It follows the January 2013 pollution episode in Beijing, compares changes across the five monitors, and examines how missing data and wind conditions affect the interpretation.
 
-## Open in VS Code
+The website is hosted on GitHub Pages. It is built with HTML, CSS, JavaScript and D3.js, using precomputed JSON data.
 
-Open this folder, right-click `index.html`, then **Open with Live Server**.
+## Run locally
 
-Alternatively, from this directory:
+Serve the project directory with any static HTTP server. For example, with Python 3 installed:
 
 ```sh
-npm start
+git clone https://github.com/digi1450/china-smog-data-story.git
+cd china-smog-data-story
+python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Open [the local preview](http://127.0.0.1:8000). Stop the server with Ctrl+C. Do not double-click `index.html`: ES modules and JSON fetches need HTTP. No npm install, backend, API key, Python packages or bundler is needed.
+Open [localhost:8000](http://127.0.0.1:8000) in a browser. Stop the server with Ctrl+C. Depending on the installation, the Python command may be `python` or `py` instead of `python3`.
 
-## Files to edit
+An HTTP server is needed because the site uses JavaScript modules and loads JSON files. There is no build step or package installation. The `npm start` shortcut runs the same Python server.
 
-| Path | Purpose |
+## Project structure
+
+| Path | Contents |
 | --- | --- |
-| `index.html` | English narrative, chapter structure, sources |
-| `css/style.css` | Original visual style plus responsive additions |
-| `js/main.js` | Startup and visible loading-error handling |
-| `js/app.js` | City selection, timeline, playback and detail panel |
-| `js/core.js` | Shared state, labels, concentration bins and utilities |
-| `js/data.js` | Load local JSON and map geometry |
-| `js/charts/` | Map, monthly mini-chart, daily stripes, comparison, wind, station agreement and added story charts |
-| `data/raw/` | Local UCI inputs, downloaded separately and ignored by Git |
-| `data/processed/` | Calculated observations, statistics and map geometry |
-| `scripts/prepare_data.py` | Reproducible calculation pipeline; Python standard library only |
-| `scripts/verify_data.py` | Independent numerical checks from raw files |
-| `assets/vendor/` | Local D3 7.9.0 and licence |
+| `index.html` | Page content and source references |
+| `css/` | Styles and responsive layouts |
+| `js/` | Chart modules, data loading and interactions |
+| `assets/vendor/` | D3.js and its licence |
+| `data/processed/` | Data used by the website |
+| `data/raw/` | Downloaded source files, kept locally and ignored by Git |
+| `scripts/` | Data preparation and verification scripts |
 
-## Recompute and verify
+## Data
 
-The website uses the committed files in `data/processed/` and runs without the raw dataset. Download the raw inputs only when rebuilding or verifying the calculations.
+The project uses [PM2.5 Data of Five Chinese Cities](https://archive.ics.uci.edu/dataset/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities) from the UCI Machine Learning Repository. The dataset is also available on [Kaggle](https://www.kaggle.com/uciml/pm25-data-for-five-chinese-cities). Calculations in this repository use the UCI download.
 
-1. Download [the original UCI archive](https://archive.ics.uci.edu/static/public/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities.zip).
-2. Extract the ZIP, then extract `FiveCitiePMData.rar` inside it.
-3. Place the five CSV files directly in `data/raw/`: `BeijingPM20100101_20151231.csv`, `ChengduPM20100101_20151231.csv`, `GuangzhouPM20100101_20151231.csv`, `ShanghaiPM20100101_20151231.csv` and `ShenyangPM20100101_20151231.csv`.
+The dataset contains hourly PM2.5 measurements and meteorological variables. The main charts use one U.S. diplomatic-post monitoring series per city; nearby Chinese monitoring series are used for comparison. Source data are licensed under CC BY 4.0.
 
-On macOS, the equivalent commands from the project directory are:
+Citation: Chen, S. (2016). *PM2.5 Data of Five Chinese Cities* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C52K58.
 
-```sh
-mkdir -p data/raw
-curl --fail --location 'https://archive.ics.uci.edu/static/public/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities.zip' -o data/raw/uci-five-cities.zip
-unzip -o data/raw/uci-five-cities.zip -d data/raw
-bsdtar -xf data/raw/FiveCitiePMData.rar -C data/raw
+### Rebuild the chart data
+
+The processed data are included, so downloading the raw files is only necessary to recalculate or verify the results. The scripts require Python 3.10 or later and use the standard library.
+
+1. Download [the UCI archive](https://archive.ics.uci.edu/static/public/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities.zip).
+2. Extract the ZIP, then extract `FiveCitiePMData.rar` inside it using an archive tool that supports RAR files.
+3. Place these five files directly in `data/raw/`:
+
+```text
+BeijingPM20100101_20151231.csv
+ChengduPM20100101_20151231.csv
+GuangzhouPM20100101_20151231.csv
+ShanghaiPM20100101_20151231.csv
+ShenyangPM20100101_20151231.csv
 ```
 
-Then run:
+From the project directory, run:
 
 ```sh
-npm run data
-npm run check
+python3 scripts/prepare_data.py
+python3 scripts/verify_data.py
 ```
 
-Run these after changing calculation rules. The site reads the resulting JSON, and all main numerical findings update from it. The verification script checks raw CSV hashes against the processed manifest. Keep downloaded files unchanged; `data/raw/` remains local and is excluded from new commits. Display rounding does not determine classification thresholds.
+The preparation script writes `data/processed/analysis.json`. The verification script checks calculations against the raw files and validates their SHA-256 hashes against the processed manifest. Keep the source files unchanged.
 
-## Evidence boundaries
+## Method
 
-- Five monitors are not citywide means or a national sample.
-- 2014 and 2015 are both after the plan; this comparison is descriptive.
-- Beijing's wind check uses 2011–2012 and 2014–2015, excluding 2013.
-- The month × wind weighting is a limited sensitivity check, not a causal estimate or a reproduction of the paper's full meteorological adjustment.
-- Missingness remains relevant even with completeness rules. Shenyang's small change reverses direction in the paired-calendar check.
-- UCI files were downloaded and checked. Kaggle file equivalence has not been established.
-- D3, JSON and map geometry are local. Google Fonts is optional; system fonts are the fallback when offline.
+- Daily means require at least 18 valid hourly readings. Monthly means require at least 15 valid days. Annual means weight valid days equally.
+- Missing, negative and non-finite readings are excluded. Missing values are not replaced with zero.
+- The five-city annual comparison uses 2014 and 2015, with valid-day counts shown. A separate comparison pairs calendar dates available in both years to examine the effect of missing days.
+- High-pollution-day shares count daily means above 150 µg/m³ and divide by the number of valid days.
+- The Beijing wind comparison uses 2011–2012 and 2014–2015. A sensitivity check applies common weights to matching calendar-month and wind-category groups with at least five eligible days per period.
 
-## Data and method
+## Interpretation
 
-Measurements come from [UCI dataset 394](https://archive.ics.uci.edu/dataset/394/pm2%2B5%2Bdata%2Bof%2Bfive%2Bchinese%2Bcities), licensed CC BY 4.0. Cite Chen, S. (2016), *PM2.5 Data of Five Chinese Cities*, doi:10.24432/C52K58. Each CSV's SHA-256 hash and columns are recorded in `data/processed/analysis.json` under `manifest`.
+The records describe individual monitors rather than citywide or national averages. Both years in the five-city comparison are after the September 2013 Action Plan, and the dataset ends before the plan's 2017 deadline. These comparisons describe observed changes; they do not establish a causal policy effect or whether the plan met its targets.
 
-Daily means require at least 18 valid hourly readings; monthly means require at least 15 valid days. Annual means weight valid days equally. Missing, negative and non-finite values are excluded, never replaced with zero. These are project completeness rules, not regulatory certification. High-pollution-day shares count unrounded daily means above 150 µg/m³ and divide by valid days.
+Missing observations and weather differences can affect the results. The wind sensitivity check accounts for month and wind-category composition, rather than all meteorological factors. WHO 2021 guideline values are labelled as retrospective references when applied to these historical measurements.
 
-The Beijing sensitivity check uses dominant recorded wind categories, excluding tied modes. Shared calendar-month × wind groups need at least five eligible days in each period. Both periods receive the same weights: the average of each group's share of retained days in the two periods. This adjusts composition for month and wind category only.
-
-The website's **Sources & reproducible method** section contains policy and WHO references, aggregation rules and limitations. The calculation and verification scripts remain available in this repository.
-
-## Future submission
-
-The static entry point is `index.html`; it can be hosted on GitHub Pages with its relative assets unchanged. Deployment is not part of this revision. The assignment's two-page design rationale PDF and presentation have not been produced in this task.
+Policy, research and WHO references are listed in the website's **Sources & reproducible method** section.
