@@ -23,15 +23,15 @@ function drawCalendar() {
     g.selectAll('rect').data(rows).join('rect')
       .attr('x', r => x(doy(r.d))).attr('y', y0).attr('width', sw).attr('height', rowH).attr('shape-rendering','crispEdges')
       .style('fill', r => r.v == null ? 'var(--na)' : `var(--b${bandOf(r.v)})`);
-    const hl = g.append('rect').attr('y', y0 - 3).attr('height', rowH + 6).attr('width', Math.max(2, sw))
-      .style('fill','none').style('stroke','var(--ink)').style('stroke-width',1.5).attr('hidden', true);
+    const hl = g.append('rect').attr('class','day-cursor').attr('x',m.l).attr('y', y0 - 3).attr('height', rowH + 6).attr('width', Math.max(2, sw))
+      .style('fill','none').style('stroke','var(--ink)').style('stroke-width',1.5).attr('visibility','hidden').attr('pointer-events','none');
     g.append('rect').attr('x', m.l).attr('y', y0).attr('width', W - m.l - m.r).attr('height', rowH).style('fill','transparent').style('cursor','crosshair')
       .on('pointermove', ev => {
         const i = Math.max(0, Math.min(rows.length - 1, Math.floor(x.invert(d3.pointer(ev)[0])))), r = rows[i];
-        hl.attr('hidden', null).attr('x', x(i) - 0.5);
+        hl.attr('visibility','visible').attr('x', x(i) - 0.5);
         showTip(r.v == null ? `${fmtDate(r.d)}<br>No reading` : `${fmtDate(r.d)}<br><b>${fmt(r.v)}</b> µg/m³ · ${BANDS[bandOf(r.v)].r}<br>${(r.v/15).toFixed(1)}× WHO 24-h guideline`, ev);
       })
-      .on('pointerleave', () => { hideTip(); hl.attr('hidden', true); });
+      .on('pointerleave', () => { hideTip(); hl.attr('visibility','hidden'); });
   });
   const w = worstDay(c), k = years.indexOf(w.d.getFullYear()), y0 = m.t + k * stride, xx = x(doy(w.d)) + sw/2, end = xx > W * 0.6;
   svg.append('line').attr('x1', xx).attr('x2', xx).attr('y1', y0 + rowH).attr('y2', y0 + rowH + 6).style('stroke','var(--ink)');

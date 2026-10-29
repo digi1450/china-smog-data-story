@@ -5,7 +5,7 @@ sel.innerHTML = D.trust.map((t, i) => `<option value="${i}">${t.city} · ${t.sta
 sel.addEventListener('change', drawTrust);
 function drawTrust() {
   const t = D.trust[+sel.value || 0];
-  const S = Math.min(widthOf('trust'), 480), m = {t:12, r:12, b:40, l:46};
+  const S = Math.min(widthOf('trust'), innerWidth >= 1000 ? Math.max(280, Math.min(420, innerHeight * .44)) : 480), m = {t:12, r:12, b:40, l:46};
   const svg = svgFor('trust', S, S);
   d3.select('#trust svg').style('max-width', S + 'px');
   const mx = Math.ceil(d3.max(t.pts, p => Math.max(p[0], p[1])) / 100) * 100;

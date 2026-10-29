@@ -1,5 +1,6 @@
 import { createPlayback } from './playback.js';
-import { setupScrollMotion, reducedMotion } from './motion.js';
+import { setupScrollMotion, setupDisclosureMotion, reducedMotion } from './motion.js';
+import { setupPresentation, navigateToScene } from './presentation.js';
 import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from './core.js';
 import { drawMap,updateMap } from './charts/map.js';
 import { drawMini,updateMiniMarker } from './charts/mini.js';
@@ -120,7 +121,7 @@ function updatePanel() {
   const chg = (a15.mean / a14.mean - 1) * 100;
   m.innerHTML = `<div class="top"><span>Station change, 2014 → 2015</span><b>${chg > 0 ? '+' : ''}${fmt(chg)}%</b></div>
     <div class="top"><span>${fmt(a14.mean)} → ${fmt(a15.mean)} µg/m³ · ${a14.days}/${a15.days} valid days</span></div>
-    <p class="policy-note"><b>Policy context, not a station target:</b> ${I.policy} Data end in 2015; target attainment is not evaluated.</p>`;
+    <details class="context-details"><summary>Policy context</summary><p class="policy-note"><b>Not a station target:</b> ${I.policy} Data end in 2015; target attainment is not evaluated.</p></details>`;
   document.getElementById('why').innerHTML = I.why;
 }
 
@@ -147,6 +148,7 @@ function setupStoryNavigation() {
    if (!target) return;
    event.preventDefault();
    clearFragment();
+   if (navigateToScene(target)) return;
    if (!target.hasAttribute('tabindex')) {
      target.setAttribute('tabindex', '-1');
      target.addEventListener('blur', () => target.removeAttribute('tabindex'), {once:true});
@@ -160,29 +162,33 @@ function setupStoryNavigation() {
    if (!location.hash) return;
    const incomingTarget = targetFor(location.hash);
    clearFragment();
-   incomingTarget?.scrollIntoView({behavior:'instant', block:'start'});
+   if (incomingTarget && !navigateToScene(incomingTarget, true)) incomingTarget.scrollIntoView({behavior:'instant', block:'start'});
  };
  openIncomingSection();
  addEventListener('hashchange', openIncomingSection);
  const links = [...document.querySelectorAll('.chart-nav a')];
- const targets = links.map(link => document.querySelector(link.getAttribute('href')));
- let scheduled = false;
- const update = () => {
-   scheduled = false;
-   let active = -1;
-   targets.forEach((target,i) => {if (target.getBoundingClientRect().top <= 150) active = i;});
-   if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) active = links.length - 1;
-   links.forEach((link,i) => {
-     if (i === active) link.setAttribute('aria-current','location');
+ const update = event => {
+   // The deck owns the current chapter; transformed positions are in flight
+   // when storychange fires and cannot identify the destination reliably.
+   const id = event?.detail?.id || document.querySelector('.story-scene.is-current')?.id;
+   const scenes = [...document.querySelectorAll('.story-scene')];
+   const position = scenes.findIndex(scene => scene.id === id);
+   let current;
+   links.forEach(link => {
+     const index = scenes.indexOf(targetFor(link.getAttribute('href')));
+     if (index >= 0 && index <= position) current = link;
+   });
+   links.forEach(link => {
+     if (link === current) link.setAttribute('aria-current','location');
      else link.removeAttribute('aria-current');
    });
  };
- addEventListener('scroll', () => { if (!scheduled) {scheduled = true; requestAnimationFrame(update);} }, {passive:true});
+ document.addEventListener('storychange', update);
  update();
 }
 function boot() {
- fillEvidence(); renderAll(); document.getElementById('loadStatus').hidden = true;
- setupPlayback(); setupScrollMotion(); setupStoryNavigation();
+ fillEvidence(); setupPresentation(); renderAll(); document.getElementById('loadStatus').hidden = true;
+ setupPlayback(); setupScrollMotion(); setupDisclosureMotion(); setupStoryNavigation();
  const themeButton = document.getElementById('theme');
  const themes = ['auto','light','dark'];
  themeButton.addEventListener('click', () => {
@@ -194,5 +200,6 @@ function boot() {
  let rt, lastW = innerWidth;
  addEventListener('resize', () => { if (innerWidth === lastW) return; lastW=innerWidth; clearTimeout(rt); rt=setTimeout(renderAll,150); });
  addEventListener('scroll',hideTip,{passive:true});
+ document.addEventListener('storychange',hideTip);
 }
 export {boot,selectCity,setMonth,stopPlay,worstDay};

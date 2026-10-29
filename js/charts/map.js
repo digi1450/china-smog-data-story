@@ -4,7 +4,7 @@ import { selectCity } from '../app.js';
 
 let mapSel = null;
 function drawMap() {
-  const W = widthOf('map'), H = Math.round(W * 0.78);
+  const W = widthOf('map'), H = Math.round(Math.min(W * .78, document.documentElement.classList.contains('deck-ready') && innerWidth >= 1000 ? innerHeight * .29 : Infinity));
   const svg = svgFor('map', W, H);
   const china = GEO.features.find(f => f.properties.n === 'China');
   const proj = d3.geoConicConformal().parallels([25, 47]).rotate([-105, 0]).fitExtent([[W*0.03, H*0.04], [W*(W < 500 ? 0.8 : 0.9), H*0.96]], china);
