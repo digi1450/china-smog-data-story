@@ -315,3 +315,22 @@ html { scroll-behavior:smooth; scroll-padding-top:24px; }
 .sources-heading .eyebrow { margin-bottom:14px; }
 html { scroll-padding-top:100px; }
 @media(max-width:760px) { .chart-nav { position:static; } html { scroll-padding-top:24px; } }
+
+.sensitivity-details summary { display:flex; align-items:center; gap:10px; list-style:none; padding-block:8px; }
+.sensitivity-details summary::-webkit-details-marker { display:none; }
+.sensitivity-details summary::before { content:'›'; font-size:24px; line-height:1; color:var(--accent); transition:transform .2s ease; }
+.sensitivity-details[open] summary::before { transform:rotate(90deg); }
+.sensitivity-details .table-scroll { padding-top:8px; }
+@keyframes sensitivity-row-in {
+ from { opacity:0; transform:translateY(-7px); }
+ to { opacity:1; transform:translateY(0); }
+}
+@media(prefers-reduced-motion:no-preference) {
+ .sensitivity-details[open] :is(caption,thead,tbody tr) { animation:sensitivity-row-in .36s ease-out both; }
+ .sensitivity-details[open] thead { animation-delay:60ms; }
+ .sensitivity-details[open] tbody tr:nth-child(1) { animation-delay:120ms; }
+ .sensitivity-details[open] tbody tr:nth-child(2) { animation-delay:190ms; }
+ .sensitivity-details[open] tbody tr:nth-child(3) { animation-delay:260ms; }
+ .sensitivity-details[open] tbody tr:nth-child(4) { animation-delay:330ms; }
+ .sensitivity-details[open] tbody tr:nth-child(5) { animation-delay:400ms; }
+}
