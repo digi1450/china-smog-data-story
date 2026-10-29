@@ -1,0 +1,4 @@
+# Preserve downloaded CSV bytes, including their original CRLF line endings.
+data/raw/*.csv -text whitespace=cr-at-eol
+data/raw/*.rar binary
+data/raw/*.zip binary

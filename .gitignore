@@ -1,0 +1,18 @@
+# macOS metadata
+.DS_Store
+
+# Local dependencies and Python cache
+node_modules/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Generated previews and browser-test artifacts
+output/
+.playwright-cli/
+
+# Local working notes (not part of the public project)
+/docs/METHODOLOGY.md
+/docs/SOURCES.md
+/docs/CHANGES.md
+/docs/VERIFICATION.md
