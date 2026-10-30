@@ -18,13 +18,20 @@ Open [localhost:8000](http://127.0.0.1:8000) in a browser. Stop the server with 
 
 An HTTP server is needed because the site uses JavaScript modules and loads JSON files. There is no build step or package installation. The `npm start` shortcut runs the same Python server.
 
+After editing JavaScript or CSS, run `python3 scripts/version_assets.py` (or `npm run assets`) to update content-based cache versions. The script updates the style entry point and local module URLs together. `npm run assets:check` checks them without changing files.
+
+Run `npm test` to check module dependencies, asset versioning and scroll intent. Data verification is available separately through `npm run check` and requires the raw source files.
+
 ## Project structure
 
 | Path | Contents |
 | --- | --- |
 | `index.html` | Page content and source references |
-| `css/` | Styles and responsive layouts |
-| `js/` | Chart modules, data loading and interactions |
+| `css/` | Theme, shared styles, layouts, explorer and presentation scenes; `style.css` loads them in order |
+| `js/app.js` | Application initialization and rendering |
+| `js/explorer.js`, `js/actions.js` | Explorer controls and requests from charts |
+| `js/presentation.js`, `js/navigation.js` | Slide movement and internal links |
+| `js/charts/` | Individual chart renderers |
 | `assets/vendor/` | D3.js and its licence |
 | `data/processed/` | Data used by the website |
 | `data/raw/` | Downloaded source files, kept locally and ignored by Git |

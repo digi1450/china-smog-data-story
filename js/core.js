@@ -1,5 +1,5 @@
-import { D } from './data.js?v=20261030-9';
-export { D, GEO } from './data.js?v=20261030-9';
+import { D } from './data.js?v=aab38014ca01';
+export { D, GEO } from './data.js?v=aab38014ca01';
 const CITIES = ['Beijing','Shenyang','Chengdu','Shanghai','Guangzhou'];
 const CK = {Beijing:'bj',Shenyang:'sy',Chengdu:'cd',Shanghai:'sh',Guangzhou:'gz'};
 const cvar = c => `var(--c-${CK[c]})`;
@@ -39,6 +39,15 @@ const state = { city: 'Beijing', month: 48, min: COMMON_I };
 const MV = {};
 CITIES.forEach(c => { const m = new Map(D.monthly[c]); MV[c] = MONTHS.map(d => m.has(ym(d)) ? m.get(ym(d)) : null); });
 const annualOf = (c, y) => D.annual[c].find(a => a.year === y);
+
+export function worstDay(city) {
+  const values = D.daily[city];
+  let best = -1, index = -1;
+  values.forEach((value, i) => {
+    if (value != null && value > best) { best = value; index = i; }
+  });
+  return {v: best, d: d3.timeDay.offset(DAY0, index)};
+}
 
 
 /* Shared chart utilities */

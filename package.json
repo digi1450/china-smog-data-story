@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "assets": "python3 scripts/version_assets.py",
+    "assets:check": "python3 scripts/version_assets.py --check",
+    "test": "node --test scripts/*.test.js && python3 scripts/test_version_assets.py",
     "start": "python3 -m http.server 8000 --bind 127.0.0.1",
     "data": "python3 scripts/prepare_data.py",
     "check": "python3 scripts/verify_data.py"

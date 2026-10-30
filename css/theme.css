@@ -1,0 +1,47 @@
+/* Shared theme and chart styles. */
+:root {
+  --bg: #eceeea;
+  --surface: #f8f9f6;
+  --ink: #16191b;
+  --ink-2: #4a4f52;
+  --ink-3: #6e7376;
+  --rule: #d3d7d1;
+  --grid: #e1e4df;
+  --na: #dde0da;
+  --sea: #e4e8e6;
+  --land: #f6f6f1;
+  --land-other: #edeee8;
+  --border: #c9cdc6;
+  --accent: #1f6f8b;
+  --before: #9a9e9b;
+  --c-bj: #2a78d6; --c-sy: #eb6834; --c-cd: #1baf7a; --c-sh: #eda100; --c-gz: #e87ba4;
+  --b0: #ece3c4; --b1: #dcc384; --b2: #c99d4c; --b3: #a8722c; --b4: #7c4a1d; --b5: #4d2a12;
+  --b0-ink: #16191b; --b1-ink: #16191b; --b2-ink: #16191b; --b3-ink: #ffffff; --b4-ink: #ffffff; --b5-ink: #ffffff;
+  --good: #2f7d4f; --bad: #b4462b;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131518; --surface: #1b1e22; --ink: #eef0ee; --ink-2: #bfc4c4; --ink-3: #8f9595;
+    --rule: #30353a; --grid: #262a2f; --na: #262a2f; --sea: #15181b; --land: #23272c; --land-other: #1c1f23; --border: #3a4046;
+    --accent: #5fb3cf; --before: #747a7c;
+    --c-bj: #3987e5; --c-sy: #d95926; --c-cd: #199e70; --c-sh: #c98500; --c-gz: #d55181;
+    --b0: #3b3524; --b1: #5f5130; --b2: #8c6c33; --b3: #b98a3a; --b4: #dfac52; --b5: #ffd37e;
+    --b0-ink: #ffffff; --b1-ink: #ffffff; --b2-ink: #16191b; --b3-ink: #16191b; --b4-ink: #16191b; --b5-ink: #16191b;
+    --good: #6cc391; --bad: #ef8a6b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131518; --surface: #1b1e22; --ink: #eef0ee; --ink-2: #bfc4c4; --ink-3: #8f9595;
+  --rule: #30353a; --grid: #262a2f; --na: #262a2f; --sea: #15181b; --land: #23272c; --land-other: #1c1f23; --border: #3a4046;
+  --accent: #5fb3cf; --before: #747a7c;
+  --c-bj: #3987e5; --c-sy: #d95926; --c-cd: #199e70; --c-sh: #c98500; --c-gz: #d55181;
+  --b0: #3b3524; --b1: #5f5130; --b2: #8c6c33; --b3: #b98a3a; --b4: #dfac52; --b5: #ffd37e;
+  --b0-ink: #ffffff; --b1-ink: #ffffff; --b2-ink: #16191b; --b3-ink: #16191b; --b4-ink: #16191b; --b5-ink: #16191b;
+  --good: #6cc391; --bad: #ef8a6b;
+  color-scheme: dark;
+}
+
