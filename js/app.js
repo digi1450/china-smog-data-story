@@ -1,14 +1,14 @@
-import { createPlayback } from './playback.js?v=20261030-3';
-import { setupScrollMotion, setupDisclosureMotion, reducedMotion } from './motion.js?v=20261030-3';
-import { setupPresentation, navigateToScene } from './presentation.js?v=20261030-3';
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from './core.js?v=20261030-3';
-import { drawMap,updateMap } from './charts/map.js?v=20261030-3';
-import { drawMini,updateMiniMarker } from './charts/mini.js?v=20261030-3';
-import { drawCalendar } from './charts/calendar.js?v=20261030-3';
-import { drawScore } from './charts/score.js?v=20261030-3';
-import { drawWind } from './charts/wind.js?v=20261030-3';
-import { drawTrust } from './charts/trust.js?v=20261030-3';
-import { drawCrisis,drawTrend,drawExceed,fillEvidence } from './charts/story.js?v=20261030-3';
+import { createPlayback } from './playback.js?v=20261030-9';
+import { setupScrollMotion, setupDisclosureMotion, reducedMotion } from './motion.js?v=20261030-9';
+import { setupPresentation, navigateToScene } from './presentation.js?v=20261030-9';
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from './core.js?v=20261030-9';
+import { drawMap,updateMap } from './charts/map.js?v=20261030-9';
+import { drawMini,updateMiniMarker } from './charts/mini.js?v=20261030-9';
+import { drawCalendar } from './charts/calendar.js?v=20261030-9';
+import { drawScore } from './charts/score.js?v=20261030-9';
+import { drawWind } from './charts/wind.js?v=20261030-9';
+import { drawTrust } from './charts/trust.js?v=20261030-9';
+import { drawCrisis,drawTrend,drawExceed,fillEvidence } from './charts/story.js?v=20261030-9';
 
 const bandLegendHTML = BANDS.map((b,i) => `<span><i style="background:var(--b${i})"></i>${b.r}</span>`).join('');
 document.getElementById('bandLegend').innerHTML = bandLegendHTML;
@@ -171,6 +171,9 @@ function setupStoryNavigation() {
 function boot() {
  fillEvidence(); setupPresentation(); renderAll(); document.getElementById('loadStatus').hidden = true;
  setupPlayback(); setupScrollMotion(); setupDisclosureMotion(); setupStoryNavigation();
+ document.querySelectorAll('[data-dialog]').forEach(button => {
+   button.addEventListener('click', () => document.getElementById(button.dataset.dialog).showModal());
+ });
  const themeButton = document.getElementById('theme');
  const themes = ['auto','light','dark'];
  themeButton.addEventListener('click', () => {
@@ -181,9 +184,10 @@ function boot() {
  });
  let rt, lastW = innerWidth, lastH = innerHeight;
  addEventListener('resize', () => {
-   if (innerWidth === lastW && (innerWidth < 1000 || innerHeight === lastH)) return;
+   if (innerWidth === lastW && innerHeight === lastH) return;
+   const heightOnly = innerWidth === lastW && innerWidth < 1000;
    lastW=innerWidth; lastH=innerHeight;
-   clearTimeout(rt); rt=setTimeout(renderAll,150);
+   clearTimeout(rt); rt=setTimeout(heightOnly ? () => {drawCrisis(); drawScore();} : renderAll,150);
  });
  addEventListener('scroll',hideTip,{passive:true});
  document.addEventListener('storychange',hideTip);

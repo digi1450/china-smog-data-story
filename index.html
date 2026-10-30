@@ -8,9 +8,9 @@
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
- <link rel="stylesheet" href="css/style.css?v=20261030-3">
+ <link rel="stylesheet" href="css/style.css?v=20261030-9">
  <script defer src="assets/vendor/d3.v7.9.0.min.js"></script>
- <script type="module" src="js/main.js?v=20261030-3"></script>
+ <script type="module" src="js/main.js?v=20261030-9"></script>
 </head>
 <body>
 
@@ -23,11 +23,11 @@
 <header class="hero wide" id="top">
   <p class="eyebrow">A data story · PM2.5 in five Chinese cities, 2010–2015</p>
   <div class="hero-title"><h1>Did China win its war on smog?</h1><p class="hero-meta">FIVE CITIES / SIX YEARS / ONE QUESTION</p></div>
-  <div class="hero-intro"><p class="lede">Five monitors, six years, and the early evidence after China's September 2013 Action Plan. Explore the map, then follow Beijing from its January crisis to the first two full years after the plan. This is a station-level account through 2015, not a verdict on all of China.</p><a class="explore-link" href="#explorer">Explore the changing air <span aria-hidden="true">↘</span></a></div>
+  <div class="hero-intro"><p class="lede">In 2013, China launched an Action Plan against air pollution. Explore six years of PM2.5 readings at five monitors to see what changed.</p><a class="explore-link" href="#explorer">Explore the changing air <span aria-hidden="true">↘</span></a></div>
   <a class="air-record" href="#crisis-section" aria-label="Explore Beijing's January 2013 daily pollution record">
     <span class="air-record-heading"><span class="eyebrow">31 days in Beijing / January 2013</span><span class="air-record-peak" id="airPeak"></span></span>
     <span class="air-fingerprint" id="airFingerprint" aria-hidden="true"></span>
-    <span class="air-record-caption">Each bar is one daily PM2.5 mean. Follow the record. <span aria-hidden="true">↗</span></span>
+    <span class="air-record-caption">Daily PM2.5 at the U.S. Embassy monitor · µg/m³ <span>Explore the crisis ↗</span></span>
   </a>
 </header>
 <header class="chart-nav wide"><span class="story-brand">CHINA / THE AIR RECORD</span><button class="chip" id="theme" type="button">Theme: Auto</button></header>
@@ -80,11 +80,15 @@
 
 
 <section class="chapter divider" id="crisis-section" aria-labelledby="crisis-heading">
- <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">The crisis</p><h2 id="crisis-heading">Beijing, January 2013</h2></div><div class="chapter-deck"><p>A month that made the crisis visible. Follow the daily averages at the U.S. Embassy monitor; each point represents a full day, rather than an hourly peak.</p></div></div>
- <figure class="wide"><figcaption><b>One month of daily PM2.5 in Beijing</b><span>µg/m³ · each point is a day with at least 18 valid hourly observations.</span></figcaption><div class="chart" id="crisis"></div>
- <div class="legend"><span>Dashed: WHO 2005 24-hour guideline, 25 µg/m³</span><span>Dotted: WHO 2021 24-hour guideline, 15 µg/m³</span></div>
- <p class="src">WHO 2021 is a retrospective reference, not the guideline in effect in 2013. The 24-hour guideline is defined at the annual 99th percentile; counting individual exceedance days here is descriptive.</p></figure>
- <div class="col"><p class="finding" id="crisisFinding"></p></div>
+ <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">The crisis</p><h2 id="crisis-heading">Beijing, January 2013</h2></div><div class="chapter-deck"><p>U.S. Embassy monitor. Daily averages, not hourly peaks.</p></div></div>
+ <figure class="crisis-main"><figcaption>Daily PM2.5 · µg/m³</figcaption><div class="chart" id="crisis"></div></figure>
+ <div class="crisis-footer"><p id="crisisSummary"></p><div class="legend"><span class="who-before">WHO 2005 · 25</span><span class="who-after">WHO 2021 · 15 (retrospective)</span></div><button type="button" class="chip" data-dialog="crisisDetails">Evidence &amp; method ↗</button></div>
+ <dialog class="evidence-dialog" id="crisisDetails" aria-labelledby="crisisDetailsTitle"><form method="dialog"><button class="chip" aria-label="Close evidence and method">Close ✕</button></form><h3 id="crisisDetailsTitle">Reading the January record</h3>
+ <p class="finding" id="crisisFinding"></p>
+ <p>Daily means require at least 18 valid hourly observations. Missing values are excluded and are not filled.</p>
+ <p>Dashed line: WHO 2005 24-hour guideline, 25 µg/m³. Dotted line: WHO 2021 24-hour guideline, 15 µg/m³.</p>
+ <p>WHO 2021 is a retrospective reference, not the guideline in effect in 2013. The 24-hour guideline is defined at the annual 99th percentile; counting individual exceedance days here is descriptive.</p>
+ </dialog>
 </section>
 <section class="chapter divider" id="trend-section" aria-labelledby="trend-heading">
  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">A policy marker, not a causal boundary</p><h2 id="trend-heading">The timeline matters</h2></div><div class="chapter-deck"><p>The national Action Plan was issued in September 2013. Its targets ran to 2017, beyond this dataset. Beijing has the longest record here; the other U.S. posts started later. A late-starting line means missing history, not zero pollution.</p></div></div>
@@ -104,10 +108,10 @@
 </section>
 
 <section class="chapter divider" id="results-section" aria-labelledby="h3c">
-  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Scorecard</p><h2 id="h3c">One year later, did the air improve?</h2></div><div class="chapter-deck"><p>Compare 2014 and 2015: the first two full calendar years with at least 325 valid days at every U.S. post. Both years follow the plan. The changes describe the monitors, not the policy’s causal effect.</p></div>
+  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Scorecard · 2014 → 2015</p><h2 id="h3c"><span class="score-lower">Three improved.</span> Two edged higher.</h2></div><div class="chapter-deck"><p>Annual PM2.5 at five U.S. diplomatic-post monitors.</p></div>
   </div>
-  <figure class="wide">
-    <figcaption><b>Annual station PM2.5: 2014 versus 2015</b><span>µg/m³, US consulate monitors.</span></figcaption>
+  <figure class="score-main">
+    <div class="score-toolbar"><figcaption>Annual station mean · µg/m³</figcaption>
     <div class="legend">
       <span><i class="dot" style="background:var(--before)"></i>2014</span>
       <span><i class="dot" style="background:var(--accent)"></i>2015 (city colour)</span>
@@ -115,17 +119,19 @@
     </div>
     <div class="comparison-controls" role="group" aria-label="Comparison reveal">
       <button type="button" class="chip" id="scoreReveal" aria-controls="score">↺ Replay change</button>
-      <span class="src" id="scoreStage" role="status">Three station means fell. Two rose slightly.</span>
+      <span class="visually-hidden" id="scoreStage" role="status">Three station means fell. Two rose slightly.</span>
+    </div>
     </div>
     <div class="chart" id="score"></div>
-    <p class="src">Sorted by percentage change. Means weight valid days equally; missing days are excluded. The WHO reference is retrospective. Policy targets are context, not station-level pass/fail tests.</p>
   </figure>
-  <div class="col">
+  <div class="score-footer"><p>Both years follow the Action Plan. These changes do not establish its causal effect.</p><button type="button" class="chip" data-dialog="scoreDetails">Evidence &amp; method ↗</button></div>
+  <dialog class="evidence-dialog" id="scoreDetails" aria-labelledby="scoreDetailsTitle"><form method="dialog"><button class="chip" aria-label="Close scorecard evidence and method">Close ✕</button></form><h3 id="scoreDetailsTitle">Reading the five-station comparison</h3>
     <p class="finding" id="scoreFinding"></p>
-    <details class="evidence-details"><summary>Explore the evidence &amp; limitations</summary><div class="evidence-body"><p>Three station means fell and two rose slightly. These are descriptive changes, without a significance test. Regional targets use a different spatial scope; a consulate reading cannot establish that a city or region met its target.</p>
+    <p>2014 and 2015 are the first two full calendar years with at least 325 valid days at every U.S. post. Both years follow the plan. Annual means weight valid days equally; missing days are excluded. Cities are sorted by percentage change. The WHO 2021 annual reference of 5 µg/m³ is retrospective.</p>
+    <p>Three station means fell and two rose slightly. These are descriptive changes, without a significance test. Regional targets use a different spatial scope; a consulate reading cannot establish that a city or region met its target.</p>
     <p class="note" id="missingSensitivity"></p>
-    <details class="sensitivity-details"><summary>Inspect the matched-calendar sensitivity</summary><div class="table-scroll" id="pairedTable"></div></details></div></details>
-  </div>
+    <details class="sensitivity-details"><summary>Inspect the matched-calendar sensitivity</summary><div class="table-scroll" id="pairedTable"></div></details>
+  </dialog>
 </section>
 
 <section class="chapter divider" id="extremes-section" aria-labelledby="exceed-heading">

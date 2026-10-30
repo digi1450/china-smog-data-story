@@ -1,7 +1,7 @@
-import { D, DAY0, fmt, bandOf } from './core.js?v=20261030-3';
-import { reducedMotion } from './motion.js?v=20261030-3';
-import { createWheelIntent } from './wheel-intent.js?v=20261030-3';
-import { replayScoreReveal } from './charts/score.js?v=20261030-3';
+import { D, DAY0, fmt, bandOf } from './core.js?v=20261030-9';
+import { reducedMotion } from './motion.js?v=20261030-9';
+import { createWheelIntent } from './wheel-intent.js?v=20261030-9';
+import { replayScoreReveal } from './charts/score.js?v=20261030-9';
 
 const chapters = [
   ['top', 'The question', '2010–2015'],
@@ -97,6 +97,7 @@ export function setupPresentation() {
     return false;
   };
   window.addEventListener('wheel', event => {
+    if (document.querySelector('dialog[open]')) return;
     if (event.defaultPrevented || event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY) || !event.deltaY) return;
     if (event.target.closest('input, select, textarea, [contenteditable="true"]')) return;
     event.preventDefault();
@@ -120,6 +121,7 @@ export function setupPresentation() {
     touchStart = event.touches.length === 1 ? {x:event.touches[0].clientX, y:event.touches[0].clientY, target:event.target} : null;
   }, {passive:true});
   deck.addEventListener('touchmove', event => {
+    if (document.querySelector('dialog[open]')) return;
     if (!touchStart || event.touches.length !== 1) return;
     const dx = touchStart.x - event.touches[0].clientX, dy = touchStart.y - event.touches[0].clientY;
     if (Math.abs(dx) > Math.abs(dy) || touchStart.target.closest('input, select, textarea')) return;
@@ -129,6 +131,7 @@ export function setupPresentation() {
     if (Math.abs(dy) >= 55) { go(active + Math.sign(dy)); touchStart = null; }
   }, {passive:false});
   document.addEventListener('keydown', event => {
+    if (document.querySelector('dialog[open]')) return;
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey ||
         event.target.closest('input, select, textarea, button, summary, a, [contenteditable="true"], [role="slider"], .score-row')) return;
     let index;
@@ -149,8 +152,9 @@ function drawFingerprint() {
   const start = d3.timeDay.count(DAY0, new Date(2013, 0, 1));
   const days = D.daily.Beijing.slice(start, start + 31);
   const peak = d3.max(days);
-  document.getElementById('airPeak').textContent = `Peak daily mean ${fmt(peak)} µg/m³`;
+  const peakDay = days.indexOf(peak) + 1;
+  document.getElementById('airPeak').innerHTML = `<span>Highest daily mean · ${peakDay} Jan</span><strong>${fmt(peak)} <small>µg/m³</small></strong>`;
   const fingerprint = document.getElementById('airFingerprint');
-  fingerprint.innerHTML = days.map((v, i) => `<span style="--height:${v == null ? 2 : Math.max(3, v / peak * 100)}%;--bar-colour:var(--b${v == null ? 0 : bandOf(v)});--delay:${i * 18}ms" title="${i + 1} Jan: ${v == null ? 'No data' : fmt(v)+' µg/m³'}"></span>`).join('');
+  fingerprint.innerHTML = days.map((v, i) => `<span${i + 1 === peakDay ? ' class="is-peak"' : ''} style="--height:${v == null ? 2 : Math.max(3, v / peak * 100)}%;--bar-colour:var(--b${v == null ? 0 : bandOf(v)});--delay:${i * 18}ms" title="${i + 1} Jan: ${v == null ? 'No data' : fmt(v)+' µg/m³'}">${i + 1 === peakDay ? `<span class="air-peak-day">${peakDay} Jan</span>` : ''}</span>`).join('');
   if (!reducedMotion()) fingerprint.classList.add('is-animated');
 }

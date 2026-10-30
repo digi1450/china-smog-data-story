@@ -1,10 +1,10 @@
-import { reducedMotion } from '../motion.js?v=20261030-3';
+import { reducedMotion } from '../motion.js?v=20261030-9';
 let revealed = true;
-import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261030-3';
+import { D, GEO, CITIES, CK, cvar, INFO, BANDS, bandOf, MON, MONTHS, PLAN_I, DAY0, fmtDate, ym, COMMON_I, state, MV, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=20261030-9';
 
 function drawScore() {
-  const W = widthOf('score'), narrow = W < 560, m = {t:8, r: narrow ? 8 : 230, b:26, l: narrow ? 8 : 96}, rh = narrow ? 70 : 54;
-  const H = m.t + CITIES.length * rh + m.b;
+  const W = widthOf('score'), narrow = W < 560, m = {t:8, r: narrow ? 48 : 200, b:26, l: narrow ? 74 : 110};
+  const H = Math.max(160,document.getElementById('score').clientHeight), rh = (H-m.t-m.b)/CITIES.length, compact = narrow && rh < 40;
   const svg = svgFor('score', W, H);
   const x = d3.scaleLinear().domain([0, 110]).range([m.l, W - m.r]);
   svg.append('rect').attr('x', x(0)).attr('y', m.t).attr('width', x(5) - x(0)).attr('height', H - m.t - m.b).style('fill', 'var(--grid)');
@@ -16,24 +16,24 @@ function drawScore() {
     const row = svg.append('g').attr('class','score-row').attr('tabindex',0).attr('data-city',c).attr('data-base',fmt(base.mean)).attr('data-after',fmt(a15.mean));
     row.on('pointerenter focusin', () => svg.selectAll('.score-row').classed('is-dim',function(){return this !== row.node();}))
       .on('pointerleave focusout', () => svg.selectAll('.score-row').classed('is-dim',false));
-    const cy = m.t + k * rh + (narrow ? 40 : rh / 2);
-    const nameX = narrow ? m.l : 0, nameY = narrow ? cy - 22 : cy + 4;
-    row.append('text').attr('class','lbl-strong').attr('x', nameX).attr('y', nameY).text(c);
+    const cy = m.t + k * rh + rh / 2;
+    const nameX = 0, nameY = cy + 4;
+    row.append('text').attr('class','lbl-strong').attr('x', nameX).attr('y', nameY).style('font-size',narrow?'10px':null).text(c);
     const ch = Math.round(chRaw);
     const status = ch <= -5 ? `${'−'}${Math.abs(ch)}% · lower mean` : ch >= 0 ? `${ch > 0 ? '+' : '±'}${Math.abs(ch)}% · higher mean` : `−${Math.abs(ch)}% · slightly lower`;
     const col = ch <= -5 ? 'var(--good)' : ch >= 0 ? 'var(--bad)' : 'var(--ink)';
     row.append('line').attr('class','score-link').attr('data-start',x(base.mean)).attr('data-end',x(a15.mean)).attr('x1', x(base.mean)).attr('x2', x(a15.mean)).attr('y1', cy).attr('y2', cy).style('stroke', 'var(--ink-3)').style('stroke-width', 2);
     const tipHtml = `<b>${c}</b><br>2014: ${base.mean} µg/m³ (${base.days} days)<br>2015: ${a15.mean} µg/m³ (${a15.days} days)<br>Change: ${ch > 0 ? '+' : ''}${ch}%`;
-    row.append('circle').attr('cx', x(base.mean)).attr('cy', cy).attr('r', 6).style('fill', 'var(--before)').style('stroke', 'var(--surface)').style('stroke-width', 2)
+    row.append('circle').attr('cx', x(base.mean)).attr('cy', cy).attr('r', compact?4:6).style('fill', 'var(--before)').style('stroke', 'var(--surface)').style('stroke-width', 2)
       .on('pointermove', ev => showTip(revealed ? tipHtml : `<b>${c}</b><br>2014: ${fmt(base.mean)} µg/m³ (${base.days} days)`, ev)).on('pointerleave', hideTip);
-    row.append('circle').attr('class','score-end').attr('data-start',x(base.mean)).attr('data-end',x(a15.mean)).attr('cx', x(a15.mean)).attr('cy', cy).attr('r', 8).style('fill', cvar(c)).style('stroke', 'var(--ink)').style('stroke-width', 1.5)
+    row.append('circle').attr('class','score-end').attr('data-start',x(base.mean)).attr('data-end',x(a15.mean)).attr('cx', x(a15.mean)).attr('cy', cy).attr('r', compact?6:8).style('fill', cvar(c)).style('stroke', 'var(--ink)').style('stroke-width', 1.5)
       .on('pointermove', ev => showTip(revealed ? tipHtml : `<b>${c}</b><br>2014: ${fmt(base.mean)} µg/m³ (${base.days} days)`, ev)).on('pointerleave', hideTip);
     const left = a15.mean < base.mean;
     const baseAtRight = x(base.mean) > W - 90;
-    row.append('text').attr('class','lbl').attr('x', x(base.mean) + (baseAtRight ? -4 : 4)).attr('y', cy + 20).attr('text-anchor', baseAtRight ? 'end' : 'start').text(`${base.year} · ${fmt(base.mean)}`);
-    row.append('text').attr('class','lbl-strong score-after').attr('x', x(a15.mean) + (left ? -12 : 12)).attr('y', cy + 4).attr('text-anchor', left ? 'end' : 'start').text(fmt(a15.mean));
-    row.append('text').attr('class','lbl-strong score-after').attr('x', narrow ? W - m.r : W - m.r + 18).attr('y', narrow ? nameY : cy + 4)
-      .attr('text-anchor', narrow ? 'end' : 'start').style('fill', col).text(status);
+    row.append('text').attr('class','lbl').attr('x', narrow ? x(base.mean) : x(base.mean) + (baseAtRight ? -4 : 4)).attr('y', cy + (compact?11:narrow?16:20)).attr('text-anchor', narrow?'middle':baseAtRight ? 'end' : 'start').style('font-size',compact?'8px':narrow?'9px':null).text(narrow?fmt(base.mean):`${base.year} · ${fmt(base.mean)}`);
+    row.append('text').attr('class','lbl-strong score-after').attr('x', narrow ? x(a15.mean) : x(a15.mean) + (left ? -12 : 12)).attr('y', narrow ? cy-(compact?9:12) : cy + 4).attr('text-anchor', narrow?'middle':left ? 'end' : 'start').style('font-size',compact?'9px':narrow?'10px':null).text(fmt(a15.mean));
+    row.append('text').attr('class','lbl-strong score-after').attr('x', narrow ? W - 2 : W - m.r + 18).attr('y', nameY)
+      .attr('text-anchor', narrow ? 'end' : 'start').style('fill', col).style('font-size',narrow?'11px':null).text(narrow?`${ch>0?'+':ch<0?'−':'±'}${Math.abs(ch)}%`:status);
   });
   applyStage(false);
 }

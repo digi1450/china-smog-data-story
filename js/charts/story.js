@@ -1,22 +1,28 @@
-import { introduceChart, revealLine } from '../motion.js?v=20261030-3';
-import { selectCity } from '../app.js?v=20261030-3';
-import {D,CITIES,cvar,state,MV,MONTHS,PLAN_I,DAY0,fmt,svgFor,widthOf,showTip,hideTip,annualOf,fmtDate} from '../core.js?v=20261030-3';
+import { introduceChart, revealLine } from '../motion.js?v=20261030-9';
+import { selectCity } from '../app.js?v=20261030-9';
+import {D,CITIES,cvar,state,MV,MONTHS,PLAN_I,DAY0,fmt,svgFor,widthOf,showTip,hideTip,annualOf,fmtDate} from '../core.js?v=20261030-9';
 
 function drawCrisis() {
-  const W=widthOf('crisis'), H=300, m={l:48,r:18,t:36,b:32};
+  const W=widthOf('crisis'), H=Math.max(100,document.getElementById('crisis').clientHeight), m={l:42,r:18,t:24,b:32};
   const rows=d3.timeDays(new Date(2013,0,1),new Date(2013,1,1)).map(d=>({d,v:D.daily.Beijing[d3.timeDay.count(DAY0,d)]}));
   const svg=svgFor('crisis',W,H);
   const x=d3.scaleTime().domain([rows[0].d,rows.at(-1).d]).range([m.l,W-m.r]);
   const y=d3.scaleLinear().domain([0,d3.max(rows,r=>r.v)*1.16]).nice().range([H-m.b,m.t]);
   svg.append('g').attr('class','grid').selectAll('line').data(y.ticks(5)).join('line').attr('x1',m.l).attr('x2',W-m.r).attr('y1',y).attr('y2',y);
-  svg.append('g').attr('class','axis').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(0));
+  svg.append('g').attr('class','axis').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(y).ticks(H<220?3:5).tickSize(0));
   svg.append('g').attr('class','axis').attr('transform',`translate(0,${H-m.b})`).call(d3.axisBottom(x).ticks(W<500?4:8).tickFormat(d3.timeFormat('%d Jan')).tickSizeOuter(0));
   [25,15].forEach((v,i)=>svg.append('line').attr('x1',m.l).attr('x2',W-m.r).attr('y1',y(v)).attr('y2',y(v)).style('stroke','var(--ink-2)').style('stroke-dasharray',i?'2,3':'7,4'));
   svg.append('path').attr('class','story-line').datum(rows).attr('d',d3.line().defined(r=>r.v!=null).x(r=>x(r.d)).y(r=>y(r.v))).style('fill','none').style('stroke',cvar('Beijing')).style('stroke-width',2);
   svg.selectAll('circle').data(rows.filter(r=>r.v!=null)).join('circle').attr('cx',r=>x(r.d)).attr('cy',r=>y(r.v)).attr('r',3.5).style('fill',cvar('Beijing'))
     .on('pointermove',(e,r)=>showTip(`${fmtDate(r.d)}<br>${fmt(r.v)} µg/m³`,e)).on('pointerleave',hideTip);
   const peak=d3.greatest(rows,r=>r.v??-1), px=x(peak.d);
-  svg.append('text').attr('class','lbl-strong').attr('x',px).attr('y',y(peak.v)-13).attr('text-anchor',px>W-130?'end':px<120?'start':'middle').text(`${fmtDate(peak.d)} · ${fmt(peak.v)}`);
+  const py=y(peak.v), labelX=Math.min(W-155,px+26), labelY=Math.max(20,py-44);
+  svg.append('circle').attr('cx',px).attr('cy',py).attr('r',6).style('fill',cvar('Beijing')).style('stroke','var(--bg)').style('stroke-width',2);
+  svg.append('line').attr('x1',px+5).attr('y1',py-7).attr('x2',labelX).attr('y2',labelY+14).style('stroke','var(--ink-3)');
+  const annotation=svg.append('g').attr('transform',`translate(${labelX},${labelY})`).attr('class','crisis-peak');
+  annotation.append('text').attr('class','lbl').text(`${d3.timeFormat('%-d %b')(peak.d)} · ${W<500?'daily peak':'highest daily mean'}`);
+  annotation.append('text').attr('y',35).style('font-family','var(--f-display)').style('font-size',W<500?'28px':'40px').style('font-weight',700).style('fill','var(--ink)').text(fmt(peak.v));
+  annotation.append('text').attr('class','lbl').attr('x',W<500?87:126).attr('y',35).text('µg/m³');
   introduceChart(svg,'crisis',chart=>revealLine(chart));
 }
 
@@ -85,6 +91,7 @@ function table(headers,rows,caption) {
 function fillEvidence() {
   const crisis=D.daily.Beijing.slice(d3.timeDay.count(DAY0,new Date(2013,0,1)),d3.timeDay.count(DAY0,new Date(2013,1,1))).filter(v=>v!=null);
   document.getElementById('crisisFinding').textContent=`The highest valid daily mean in January 2013 was ${fmt(d3.max(crisis))} µg/m³. ${crisis.filter(v=>v>25).length} of ${crisis.length} valid days exceeded the WHO 2005 24-hour reference of 25 µg/m³.`;
+  document.getElementById('crisisSummary').textContent=`${crisis.filter(v=>v>25).length} of ${crisis.length} valid days above the WHO 2005 reference.`;
   const delta=c=>(annualOf(c,2015).mean/annualOf(c,2014).mean-1)*100;
   document.getElementById('scoreFinding').textContent=`From 2014 to 2015: Guangzhou ${fmt(delta('Guangzhou'))}%, Beijing ${fmt(delta('Beijing'))}%, Chengdu ${fmt(delta('Chengdu'))}%; Shenyang +${fmt(delta('Shenyang'))}% and Shanghai +${fmt(delta('Shanghai'))}%. These are monitor averages, not national results.`;
   const paired=D.pairedCalendar.Shenyang;
