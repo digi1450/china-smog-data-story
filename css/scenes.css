@@ -1,3 +1,40 @@
+/* Team introduction uses the same deck navigation as the story. */
+.deck-ready .story-deck > #team {display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;align-content:stretch;gap:22px;overflow:hidden}
+.team-heading {display:grid;gap:10px;max-width:850px}
+.team-heading h2 {font:750 clamp(32px,4.2vw,56px)/1.03 var(--f-display);letter-spacing:-.035em;max-width:23ch}
+.team-heading .eyebrow {font-size:10px}
+.team-subtitle {font:12px/1.4 var(--f-mono);color:var(--ink-3)}
+.team-members {display:grid;grid-template-rows:auto minmax(0,1fr);gap:10px;min-height:0}
+.team-members h3 {font:500 11px/1.4 var(--f-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3)}
+.team-roster {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;column-gap:44px;list-style:none;margin:0;padding:0;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scroll-padding-block:8px}
+.team-roster:focus-visible {outline:2px solid var(--accent);outline-offset:4px}
+.team-roster li {display:grid;align-content:center;gap:6px;padding:10px 0;border-top:1px solid var(--rule);min-width:0}
+.team-name {font:600 17px/1.2 var(--f-display);color:var(--ink)}
+.team-meta {display:flex;justify-content:space-between;align-items:baseline;gap:12px;font:11px/1.35 var(--f-mono)}
+.student-id {color:var(--ink-3);white-space:nowrap}
+.team-role {color:var(--accent);text-align:right}
+.team-start {width:min(100%,320px);justify-self:end;font-size:17px}
+@media(max-width:760px) {
+ .deck-ready .story-deck > #team {padding-top:66px;padding-bottom:80px;gap:16px}
+ .team-heading {gap:8px}
+ .team-heading h2 {font-size:clamp(30px,7.5vw,44px)}
+ .team-subtitle {font-size:10px}
+ .team-roster {grid-template-columns:minmax(0,1fr);grid-auto-rows:min-content;padding-right:6px}
+ .team-roster li {padding:10px 0}
+ .team-name {font-size:16px}
+ .team-meta {font-size:10px;gap:8px}
+ .team-start {font-size:15px;justify-self:stretch;width:auto}
+}
+@media(max-height:700px) {
+ .deck-ready .story-deck > #team {padding-top:62px;padding-bottom:76px;gap:12px}
+ .team-heading {gap:6px}
+ .team-heading h2 {font-size:clamp(28px,3.5vw,40px)}
+ .team-roster li {padding:7px 0;gap:4px}
+ .team-name {font-size:15px}
+ .team-meta {font-size:10px}
+ .team-start {padding-block:7px}
+}
+
 /* Opening question: a short introduction above the January evidence. */
 .deck-ready #top { grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); align-content:center; align-items:center; gap:24px 64px; }
 #top h1 { font-size:clamp(60px,6.7vw,104px); max-width:13ch; }
@@ -134,3 +171,163 @@
  .score-footer p { font-size:10px; }
 }
 
+/* Slide 5–7: the same fullscreen editorial grammar as the original scorecard.
+   All selectors are section-scoped to protect chapters 1–4 and 8–12. */
+@media (min-width:1000px) {
+ .deck-ready .story-deck > .visual-scene { display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr) auto; gap:16px; align-content:stretch; align-items:stretch; overflow:hidden; }
+ .deck-ready .visual-scene::before {display:none}
+ .deck-ready .visual-scene > .chapter-intro { grid-column:1; grid-row:1; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,.7fr); align-items:center; gap:40px; }
+ .visual-scene .chapter-heading {gap:10px}
+ .visual-scene h2 {font-size:clamp(32px,3.7vw,52px);max-width:22ch;letter-spacing:-.035em;line-height:1.06}
+ .visual-scene h2 em {font-style:normal;color:var(--accent)}
+ .visual-scene .chapter-deck {padding:0;max-width:33ch}
+ .visual-scene .chapter-deck p {font-size:17px;line-height:1.55}
+ .deck-ready .visual-scene > .editorial-figure {grid-column:1;grid-row:2;display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0;height:100%;gap:12px;background:transparent;border:0;border-radius:0;padding:0;overflow:hidden}
+ .visual-scene .scene-figure-head {display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:24px}
+ .visual-scene .scene-figure-head figcaption {font:11px var(--f-mono);color:var(--ink-3)}
+ .visual-scene .scene-figure-head .legend {font-size:11px}
+ .visual-scene .editorial-figure .chart {min-height:0;height:100%;width:100%}
+ .visual-scene .editorial-figure .chart svg {height:100%;width:100%}
+ .deck-ready .visual-scene > .scene-bottom, .deck-ready .visual-scene > .verdict-bottom {grid-column:1;grid-row:3;display:flex;justify-content:space-between;align-items:center;gap:24px;border-top:1px solid var(--rule);padding-top:13px;min-height:50px}
+ .visual-scene .scene-bottom p, .visual-scene .verdict-bottom p {font:14px/1.5 var(--f-mono);color:var(--ink-2);max-width:85ch}
+ .visual-scene .scene-bottom strong,.visual-scene .verdict-bottom strong {color:var(--ink);font-weight:650}
+ .visual-scene .scene-bottom .accent-number {color:var(--good)}
+ .visual-scene .scene-bottom button,.visual-scene .verdict-bottom button {flex-shrink:0}
+ /* Two equally balanced statistics instead of misaligned cards. */
+ .deck-ready #verdict-section {grid-template-rows:auto minmax(0,1fr) auto}
+ .deck-ready #verdict-section > .chapter-intro {grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr)}
+ .verdict-section h2 {font-size:clamp(44px,5vw,72px);line-height:.98}
+ .verdict-accent {color:var(--accent)}
+ .deck-ready #verdict-section > .verdict-visual {grid-column:1;grid-row:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));min-height:0;border-block:1px solid var(--rule)}
+ .verdict-figure {padding:clamp(22px,3vw,44px) clamp(15px,3vw,44px);display:flex;flex-direction:column;justify-content:space-between;gap:12px;min-width:0}
+ .verdict-figure:first-child {border-right:1px solid var(--rule)}
+ .verdict-figure .eyebrow {font:11px var(--f-mono);color:var(--ink-3)}
+ .verdict-value {display:flex;align-items:center;gap:22px}
+ .verdict-value strong {font:750 clamp(80px,11vh,130px)/1 var(--f-display);letter-spacing:-.075em;color:var(--good)}
+ .verdict-health .verdict-value strong {color:var(--accent)}
+ .verdict-value strong span {font-size:.50em;color:var(--ink-3);font-weight:500}
+ .verdict-value > span {font:650 clamp(17px,2vw,27px)/1.18 var(--f-display)}
+ .verdict-figure > p:last-child {font:13px var(--f-mono);color:var(--ink-2)}
+ .station-dots {display:flex;gap:10px;}
+ .station-dots i {display:block;width:clamp(24px,4vw,56px);height:9px;border-radius:2px;background:var(--rule)}
+ .verdict-improve .station-dots i:nth-child(-n+3) {background:var(--good)}
+ .verdict-health .station-dots i {background:var(--accent)}
+}
+/* Compact scenes reserve the navigation area; evidence scrolls in dialogs. */
+@media(max-width:999px) {
+ .deck-ready .story-deck > .visual-scene {display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:12px;align-content:stretch;align-items:stretch;overflow:hidden;padding-top:66px;padding-bottom:80px}
+ .deck-ready .visual-scene::before {display:none}
+ .deck-ready .visual-scene > .chapter-intro {grid-column:1;grid-row:1;display:grid;grid-template-columns:1fr;gap:8px}
+ .visual-scene .chapter-heading {gap:6px}
+ .visual-scene .eyebrow {font-size:9px;line-height:1.3}
+ .visual-scene h2 {max-width:25ch;font-size:clamp(26px,4vw,38px);line-height:1.06}
+ .visual-scene h2 em,.verdict-accent {font-style:normal;color:var(--accent)}
+ .visual-scene .chapter-deck {padding:0}
+ .visual-scene .chapter-deck p {font-size:14px;line-height:1.4}
+ .deck-ready .visual-scene > .editorial-figure {grid-column:1;grid-row:2;display:grid;grid-template-rows:auto auto minmax(0,1fr);height:100%;min-height:0;width:100%;padding:0;border:0;border-radius:0;background:transparent;gap:6px;overflow:hidden}
+ .visual-scene .scene-figure-head {display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between}
+ .visual-scene .scene-figure-head figcaption {font:10px var(--f-mono);color:var(--ink-3)}
+ .visual-scene .scene-figure-head .legend {font-size:9px;gap:10px}
+ .visual-scene .editorial-figure .chart {min-height:0;height:100%;width:100%}
+ .visual-scene .editorial-figure .chart svg {height:100%;width:100%}
+ .visual-scene .scene-bottom,.visual-scene .verdict-bottom {grid-column:1;grid-row:3;border-top:1px solid var(--rule);padding-top:8px;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
+ .visual-scene .scene-bottom p,.visual-scene .verdict-bottom p {font:12px/1.4 var(--f-mono);color:var(--ink-2)}
+ .visual-scene .scene-bottom .chip,.visual-scene .verdict-bottom .chip {font-size:11px;padding:5px 10px}
+ .visual-scene .accent-number {color:var(--good)}
+ .visual-scene .chart .lbl,.visual-scene .chart .axis text {font-size:10px}
+ .visual-scene .chart .lbl-strong {font-size:11px}
+ .deck-ready #verdict-section {grid-template-rows:auto auto minmax(0,1fr) auto}
+ .deck-ready #verdict-section > .verdict-interact {grid-column:1;grid-row:2}
+ .deck-ready #verdict-section > .verdict-visual {grid-column:1;grid-row:3;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-block:1px solid var(--rule)}
+ .deck-ready #verdict-section > .verdict-bottom {grid-row:4}
+ .verdict-figure {padding:16px 12px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;min-width:0}
+ .verdict-figure:first-child {border-right:1px solid var(--rule)}
+ .verdict-value {display:flex;flex-direction:column;align-items:start;gap:8px}
+ .verdict-value strong {font:700 clamp(46px,7vw,85px)/1 var(--f-display);color:var(--good)}
+ .verdict-value strong span {font-size:.5em;color:var(--ink-3)}
+ .verdict-value > span {font:600 15px/1.2 var(--f-display)}
+ .verdict-health .verdict-value strong {color:var(--accent)}
+ .station-dots {display:flex;gap:5px}
+ .station-dots i {height:7px;flex:1;background:var(--rule)}
+ .verdict-improve .station-dots i:nth-child(-n+3) {background:var(--good)}
+ .verdict-health .station-dots i {background:var(--accent)}
+ .verdict-figure > p:last-child {font:11px/1.4 var(--f-mono);color:var(--ink-2)}
+}
+@media(max-width:999px) and (max-height:740px) {
+ .deck-ready .story-deck > .visual-scene {padding-top:56px;padding-bottom:72px;gap:8px}
+ .visual-scene h2 {font-size:23px}
+ .visual-scene .chapter-deck p {font-size:12px;line-height:1.35}
+ .deck-ready .visual-scene > .chapter-intro {gap:5px}
+ .visual-scene .scene-bottom p,.visual-scene .verdict-bottom p {font-size:10px;line-height:1.35}
+ .visual-scene .scene-bottom,.visual-scene .verdict-bottom {gap:5px;padding-top:6px}
+ .visual-scene .chapter-heading {gap:4px}
+ .verdict-figure {padding:10px;gap:6px;min-height:0}
+ .verdict-interact .story-toggle {font-size:9px;padding:4px 7px}
+ .verdict-value {gap:5px}
+ .verdict-value strong {font-size:42px}
+ .verdict-value > span {font-size:13px}
+ .verdict-figure > p:last-child {font-size:10px}
+}
+
+/* Data story interactions: chapter-scoped; does not alter fullscreen scene geometry. */
+.story-interactions,.verdict-interact {display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-height:31px}
+.story-interactions {margin:0 0 6px}
+.story-toggle,.story-replay {font:11px/1.25 var(--f-mono);padding:6px 11px;border:1px solid var(--rule);border-radius:100px;background:transparent;color:var(--ink-2);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.story-toggle:hover,.story-replay:hover,.story-toggle:focus-visible,.story-replay:focus-visible {border-color:var(--accent);color:var(--ink);outline-offset:3px}
+.story-toggle.is-active {background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:700}
+.story-replay {margin-left:auto;color:var(--accent)}
+.story-instruction {color:var(--ink-3);font:10px var(--f-mono);margin-left:auto}
+.story-replay+.story-instruction {margin-left:0}
+.extreme-row,.wind-row {cursor:pointer;transition:opacity .2s}
+.extreme-row.is-dim,.wind-row.is-dim {opacity:.25}
+.extreme-row:focus-visible,.wind-row:focus-visible {outline:1px dashed var(--accent);outline-offset:2px}
+.verdict-interact {justify-content:flex-end;margin-block:-5px 0}
+.verdict-visual[data-focus=progress] .verdict-health,.verdict-visual[data-focus=health] .verdict-improve {opacity:.28;filter:grayscale(.7)}
+.verdict-visual .verdict-figure {transition:opacity .35s,filter .35s}
+@media (min-width:1000px){
+ .deck-ready #extremes-section>.editorial-figure,.deck-ready #wind-section>.editorial-figure {grid-template-rows:auto auto minmax(0,1fr);gap:5px}
+ .deck-ready #verdict-section {grid-template-rows:auto auto minmax(0,1fr) auto;gap:10px}
+ .deck-ready #verdict-section>.verdict-interact {grid-row:2;grid-column:1}
+ .deck-ready #verdict-section>.verdict-visual {grid-row:3}
+ .deck-ready #verdict-section>.verdict-bottom {grid-row:4}
+}
+@media(max-width:750px){.story-instruction{display:none}.story-replay{margin-left:0}.story-toggle,.story-replay{font-size:10px;padding:5px 8px}.verdict-interact{justify-content:flex-start;margin:0}}
+@media(prefers-reduced-motion:reduce){.story-toggle,.story-replay,.extreme-row,.wind-row,.verdict-visual .verdict-figure{transition:none}}
+
+
+/* 2026 storytelling motion pass — constrained to chapters 05–07. */
+@media (prefers-reduced-motion: no-preference) {
+  .deck-ready .visual-scene.is-current > .chapter-intro .chapter-heading {
+    animation: story-enter .62s cubic-bezier(.22,1,.36,1) both;
+  }
+  .deck-ready .visual-scene.is-current > .chapter-intro .chapter-deck {
+    animation: story-enter .68s .10s cubic-bezier(.22,1,.36,1) both;
+  }
+  .deck-ready .visual-scene.is-current > .editorial-figure,
+  .deck-ready .visual-scene.is-current > .verdict-visual {
+    animation: story-reveal .72s .14s cubic-bezier(.22,1,.36,1) both;
+  }
+  .deck-ready .visual-scene.is-current > .scene-bottom,
+  .deck-ready .visual-scene.is-current > .verdict-bottom {
+    animation: story-enter .55s .32s cubic-bezier(.22,1,.36,1) both;
+  }
+  .deck-ready #verdict-section.is-current .verdict-improve .station-dots i,
+  .deck-ready #verdict-section.is-current .verdict-health .station-dots i {
+    animation: station-pop .48s cubic-bezier(.2,.8,.2,1.25) both;
+  }
+  .deck-ready #verdict-section.is-current .station-dots i:nth-child(2) {animation-delay:.14s}
+  .deck-ready #verdict-section.is-current .station-dots i:nth-child(3) {animation-delay:.23s}
+  .deck-ready #verdict-section.is-current .station-dots i:nth-child(4) {animation-delay:.32s}
+  .deck-ready #verdict-section.is-current .station-dots i:nth-child(5) {animation-delay:.41s}
+  .verdict-figure {transition: opacity .4s ease, filter .4s ease, background .4s ease, transform .4s ease}
+  .verdict-visual[data-focus=progress] .verdict-improve,
+  .verdict-visual[data-focus=health] .verdict-health {background:color-mix(in srgb,var(--accent) 5%,transparent)}
+  .story-toggle,.story-replay {transition:background .25s ease,color .25s ease,border-color .25s ease,transform .25s ease}
+  .story-toggle:hover,.story-replay:hover {transform:translateY(-2px)}
+}
+@keyframes story-enter {from {opacity:0;transform:translateY(14px)}to {opacity:1;transform:translateY(0)}}
+@keyframes story-reveal {from {opacity:0;transform:translateY(9px)}to {opacity:1;transform:translateY(0)}}
+@keyframes station-pop {from {opacity:.1;transform:scaleX(.35);transform-origin:left}to {opacity:1;transform:scaleX(1);transform-origin:left}}
+@media (prefers-reduced-motion: reduce) {
+ .visual-scene *, .visual-scene *::before,.visual-scene *::after {animation:none!important;scroll-behavior:auto!important}
+}

@@ -1,12 +1,12 @@
-import { hideTip } from './core.js?v=aab38014ca01';
-import { setupScrollMotion, setupDisclosureMotion } from './motion.js?v=aab38014ca01';
-import { setupPresentation } from './presentation.js?v=aab38014ca01';
-import { setupStoryNavigation } from './navigation.js?v=aab38014ca01';
-import { setupExplorer, renderExplorer } from './explorer.js?v=aab38014ca01';
-import { drawScore } from './charts/score.js?v=aab38014ca01';
-import { drawWind } from './charts/wind.js?v=aab38014ca01';
-import { drawTrust } from './charts/trust.js?v=aab38014ca01';
-import { drawCrisis, drawTrend, drawExceed, fillEvidence } from './charts/story.js?v=aab38014ca01';
+import { hideTip } from './core.js?v=3410be10a028';
+import { setupScrollMotion, setupDisclosureMotion } from './motion.js?v=3410be10a028';
+import { setupPresentation } from './presentation.js?v=3410be10a028';
+import { setupStoryNavigation } from './navigation.js?v=3410be10a028';
+import { setupExplorer, renderExplorer } from './explorer.js?v=3410be10a028';
+import { drawScore } from './charts/score.js?v=3410be10a028';
+import { drawWind } from './charts/wind.js?v=3410be10a028';
+import { drawTrust } from './charts/trust.js?v=3410be10a028';
+import { drawCrisis, drawTrend, drawExceed, fillEvidence } from './charts/story.js?v=3410be10a028';
 
 function renderAll() {
   renderExplorer();
@@ -29,6 +29,10 @@ export function boot() {
   setupStoryNavigation();
   setupDialogs();
   setupTheme();
+  document.querySelector('.team-roster').addEventListener('keydown', event => {
+    if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) event.stopPropagation();
+  });
+  setupVerdictInteractions();
   setupResize();
   addEventListener('scroll', hideTip, {passive:true});
   document.addEventListener('storychange', hideTip);
@@ -59,6 +63,17 @@ function setupResize() {
     lastWidth = innerWidth;
     lastHeight = innerHeight;
     clearTimeout(timer);
-    timer = setTimeout(heightOnly ? () => { drawCrisis(); drawScore(); } : renderAll, 150);
+    timer = setTimeout(heightOnly ? () => { drawCrisis(); drawScore(); drawExceed(); drawWind(); } : renderAll, 150);
   });
+}
+
+function setupVerdictInteractions() {
+  const figure=document.querySelector('#verdict-section .verdict-visual');
+  const buttons=document.querySelectorAll('[data-verdict]');
+  const select=mode=>{
+    figure.dataset.focus=mode;
+    buttons.forEach(b=>{const active=b.dataset.verdict===mode;b.classList.toggle('is-active',active);b.setAttribute('aria-pressed',String(active));});
+  };
+  buttons.forEach(b=>b.addEventListener('click',()=>select(b.dataset.verdict)));
+  select('both');
 }

@@ -1,5 +1,5 @@
-import { reducedMotion } from '../motion.js?v=aab38014ca01';
-import { CITIES, cvar, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=aab38014ca01';
+import { reducedMotion } from '../motion.js?v=3410be10a028';
+import { CITIES, cvar, annualOf, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=3410be10a028';
 
 let revealed = true;
 

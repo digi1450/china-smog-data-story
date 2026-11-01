@@ -1,4 +1,4 @@
-import { D, BANDS, bandOf, MON, DAY0, fmtDate, state, fmt, showTip, hideTip, svgFor, widthOf, worstDay } from '../core.js?v=aab38014ca01';
+import { D, BANDS, bandOf, MON, DAY0, fmtDate, state, fmt, showTip, hideTip, svgFor, widthOf, worstDay } from '../core.js?v=3410be10a028';
 
 function drawCalendar() {
   const c = state.city;

@@ -8,9 +8,9 @@
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
- <link rel="stylesheet" href="css/style.css?v=aab38014ca01">
+ <link rel="stylesheet" href="css/style.css?v=3410be10a028">
  <script defer src="assets/vendor/d3.v7.9.0.min.js"></script>
- <script type="module" src="js/main.js?v=aab38014ca01"></script>
+ <script type="module" src="js/main.js?v=3410be10a028"></script>
 </head>
 <body>
 
@@ -19,6 +19,30 @@
 <div id="tip" role="tooltip" hidden></div>
 <div class="status wide" id="loadStatus" role="status">Loading verified station data…</div>
 <noscript><p class="status wide">Enable JavaScript to explore the charts. Read <a href="#sources">Sources &amp; reproducible method</a> below for definitions and sources.</p></noscript>
+
+<section class="team-scene wide" id="team" aria-labelledby="team-title">
+  <div class="team-heading">
+    <p class="eyebrow">Data Visualization · Final Project</p>
+    <h2 id="team-title">Did China win its war on smog?</h2>
+    <p class="team-subtitle">PM2.5 in five Chinese cities · 2010–2015</p>
+  </div>
+  <div class="team-members">
+    <h3>Project &amp; team</h3>
+    <ol class="team-roster" aria-label="Team members and responsibilities" tabindex="0">
+      <li><span class="team-name">Thumathorn Rungratana</span><div class="team-meta"><span class="student-id">6622770293</span><span class="team-role">UX/UI Design</span></div></li>
+      <li><span class="team-name">Nathaporn Prucksayanont</span><div class="team-meta"><span class="student-id">6622771846</span><span class="team-role">Report Writing</span></div></li>
+      <li><span class="team-name">Pornphawit Sakunasing</span><div class="team-meta"><span class="student-id">6622770590</span><span class="team-role">Presentation</span></div></li>
+      <li><span class="team-name">Nattapat Lertsiritam</span><div class="team-meta"><span class="student-id">6622772703</span><span class="team-role">UX/UI Design</span></div></li>
+      <li><span class="team-name">Peerawit Amnartpanich</span><div class="team-meta"><span class="student-id">6622780169</span><span class="team-role">Dataset Research</span></div></li>
+      <li><span class="team-name">Napatra Jetsadakarn</span><div class="team-meta"><span class="student-id">6622782108</span><span class="team-role">Data Visualization Design</span></div></li>
+      <li><span class="team-name">Chanakan Maiain</span><div class="team-meta"><span class="student-id">6622790275</span><span class="team-role">Report Writing</span></div></li>
+      <li><span class="team-name">Thiti Hiranyakart</span><div class="team-meta"><span class="student-id">6622781316</span><span class="team-role">Presentation</span></div></li>
+      <li><span class="team-name">Naphat Amorntakolsuwech</span><div class="team-meta"><span class="student-id">6922800139</span><span class="team-role">Data Visualization Design</span></div></li>
+      <li><span class="team-name">Korakorn Hawira</span><div class="team-meta"><span class="student-id">6622800058</span><span class="team-role">Dataset Research</span></div></li>
+    </ol>
+  </div>
+  <a class="team-start explore-link" href="#top">Start the story <span aria-hidden="true">→</span></a>
+</section>
 
 <header class="hero wide" id="top">
   <p class="eyebrow">A data story · PM2.5 in five Chinese cities, 2010–2015</p>
@@ -134,28 +158,27 @@
   </dialog>
 </section>
 
-<section class="chapter divider" id="extremes-section" aria-labelledby="exceed-heading">
- <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Beyond the average</p><h2 id="exceed-heading">Did high-pollution days also become rarer?</h2></div><div class="chapter-deck"><p>A lower mean does not guarantee fewer extreme days. Compare the share of valid days above 150 µg/m³, and keep the missing-day counts in view.</p></div></div>
- <figure class="wide"><figcaption><b>Days above 150 µg/m³: 2014 versus 2015</b><span>Share of valid days, not all calendar days. This is a concentration threshold, not an AQI label.</span></figcaption><div class="chart" id="exceed"></div><details class="evidence-details"><summary>Inspect day counts &amp; coverage</summary><div class="table-scroll" id="exceedTable"></div></details><p class="src">Missing days are excluded from the percentage denominator, never treated as clean days. Different missingness may still bias comparisons.</p></figure>
-</section>
-<section class="chapter divider" id="wind-section" aria-labelledby="h4c">
-  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">The twist</p><h2 id="h4c">Policy or weather? A limited wind check.</h2></div><div class="chapter-deck"><p>Wind composition can change a pollution average. Here we compare Beijing in two equal calendar windows: 2011–2012 and 2014–2015, leaving 2013 as a transition year. Grouping days by wind is a useful check, but it does not hold all weather conditions constant.</p></div>
+<section class="chapter divider visual-scene" id="extremes-section" aria-labelledby="exceed-heading">
+  <div class="chapter-intro">
+    <div class="chapter-heading"><p class="eyebrow">Beyond the average · 2014 → 2015</p><h2 id="exceed-heading">Did high-pollution days <em>become rarer?</em></h2></div>
+    <div class="chapter-deck"><p>A lower annual mean is only part of the story. Did days above <strong>150 µg/m³</strong> also become less frequent?</p></div>
   </div>
-  <figure class="wide">
-    <figcaption><b>Beijing daily PM2.5 by dominant recorded wind category</b><span>Mean of daily averages, µg/m³. Right column: share of days with that wind.</span></figcaption>
-    <div class="legend">
-      <span><i class="dot" style="background:var(--before)"></i>2011–2012 (pre-plan)</span>
-      <span><i class="dot" style="background:var(--accent)"></i>2014–2015 (post-plan)</span>
-    </div>
-    <div class="chart" id="wind"></div>
-    <p class="src">Dominant category = most frequent recorded cbwd among valid PM hours; at least 18 known directions required, ties excluded. Codes are retained as recorded: NE, NW, SE, cv (calm/variable). No extra directions are inferred. Shares use eligible wind-classified days.</p>
+  <figure class="editorial-figure" aria-labelledby="extreme-caption">
+    <div class="scene-figure-head"><figcaption id="extreme-caption">Share of valid days above 150 µg/m³</figcaption><div class="legend"><span><i class="dot" style="background:var(--before)"></i>2014</span><span><i class="dot" style="background:var(--accent)"></i>2015 · city colours</span></div></div>
+    <div class="story-interactions" role="group" aria-label="Extreme-day comparison metric"><button type="button" class="story-toggle is-active" data-exceed-mode="share" aria-pressed="true">% of observed days</button><button type="button" class="story-toggle" data-exceed-mode="count" aria-pressed="false">Number of days</button><button type="button" class="story-replay" id="extremeReplay" aria-label="Replay extreme day comparison">↺ Replay</button><span class="story-instruction">Hover or focus a city to inspect</span></div><div class="chart" id="exceed"></div>
   </figure>
-  <div class="col">
-    <p class="finding" id="windFinding"></p>
-    <details class="evidence-details"><summary>Explore the evidence &amp; limitations</summary><div class="evidence-body"><p id="weatherFinding"></p><p class="note">This sensitivity check uses identical pooled weights for matching month × wind categories with at least five days per period. It does not control temperature, humidity, rain, wind speed, economic activity or emissions. It is not the full weather-adjustment model in Liang et al. (2016), and cannot isolate a policy effect.</p></div></details>
-  </div>
+  <div class="scene-bottom"><p id="extremeFinding"><strong class="accent-number">3 of 5</strong> monitors had lower shares in 2015. <span>Missing days are excluded.</span></p><button class="chip" type="button" data-dialog="extremeDetails">Day counts &amp; method ↗</button></div>
+  <dialog class="evidence-dialog" id="extremeDetails" aria-labelledby="extremeDetailsTitle"><form method="dialog"><button type="submit" class="chip">Close ✕</button></form><h3 id="extremeDetailsTitle">What the extreme-day comparison shows</h3><p>Switch between observed day counts and their share of valid days. Shares use valid observed days, not all calendar days. Missing observations are excluded rather than counted as clean days, and different coverage can affect both measures. The threshold of 150 µg/m³ is a concentration threshold, not an AQI category.</p><div class="table-scroll" id="exceedTable"></div></dialog>
 </section>
-
+<section class="chapter divider visual-scene" id="wind-section" aria-labelledby="h4c">
+  <div class="chapter-intro">
+    <div class="chapter-heading"><p class="eyebrow">The complication · Beijing</p><h2 id="h4c">What if the wind <em>changed the picture?</em></h2></div>
+    <div class="chapter-deck"><p>Beijing: 2011–2012 versus 2014–2015, leaving 2013 as a transition year. Does the change look the same under different winds?</p></div>
+  </div>
+  <figure class="editorial-figure" aria-labelledby="wind-caption"><div class="scene-figure-head"><figcaption id="wind-caption">Daily PM2.5 by dominant wind category · µg/m³</figcaption><div class="legend"><span><i class="dot" style="background:var(--before)"></i>2011–2012</span><span><i class="dot" style="background:var(--accent)"></i>2014–2015</span></div></div><div class="story-interactions" role="group" aria-label="Explore wind categories"><button type="button" class="story-toggle is-active" data-wind="all" aria-pressed="true">All winds</button><button type="button" class="story-toggle" data-wind="cv" aria-pressed="false">Calm</button><button type="button" class="story-toggle" data-wind="SE" aria-pressed="false">SE</button><button type="button" class="story-toggle" data-wind="NW" aria-pressed="false">NW</button><button type="button" class="story-toggle" data-wind="NE" aria-pressed="false">NE</button><span class="story-instruction">Click a row to compare</span></div><div class="chart" id="wind"></div></figure>
+  <div class="scene-bottom"><p><strong>Same city. Different winds.</strong> <span id="windFinding" aria-live="polite"></span></p><button type="button" class="chip" data-dialog="windDetails">Evidence &amp; limitations ↗</button></div>
+  <dialog class="evidence-dialog" id="windDetails" aria-labelledby="windDetailsTitle"><form method="dialog"><button type="submit" class="chip">Close ✕</button></form><h3 id="windDetailsTitle">How to read the wind check</h3><p>Wind direction is one part of the weather. The charts compare 2011–2012 to 2014–2015 and omit 2013 as a transition year. Dominant wind uses the most frequent recorded category among valid PM hours; at least 18 known directions are required. Ties are excluded.</p><p id="weatherFinding"></p><p>Matching calendar-month and wind groups does not control for temperature, humidity, rain, wind speed, changes in economic activity, or emissions. This is a sensitivity check, not a causal estimate of policy impact.</p></dialog>
+</section>
 <section class="chapter divider" id="trust-section" aria-labelledby="h5c">
   <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Can we trust the numbers?</p><h2 id="h5c">Do nearby monitors tell a similar story?</h2></div><div class="chapter-deck"><p>We keep one U.S. diplomatic-post series per city as a consistent source. Nearby Chinese station columns provide a cross-check over overlapping valid days. Agreement in timing is useful evidence, but different locations need not record identical concentrations.</p></div>
   </div>
@@ -172,15 +195,15 @@
   </div>
 </section>
 
-<section class="chapter divider verdict-section" id="verdict-section" aria-labelledby="h6c">
-  <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">Verdict</p><h2 id="h6c">Early improvement, an unfinished answer</h2></div><div class="chapter-deck"><p id="verdict"></p><p>The dataset stops in 2015, two years before the national plan's deadline. Five individual monitors cannot represent all of China, and a before/after pattern cannot establish causality. The defensible answer is early, uneven improvement at these monitors—not a final national victory.</p></div>
-    <p class="eyebrow" style="margin-top:10px">What this means for Thailand</p>
-    <div class="lessons">
-      <div class="lesson"><b>Measure first</b><p>Publish consistent station records and missing-data coverage so people can assess a trend. This is a practical lesson, not an estimated policy effect in Thailand.</p></div>
-      <div class="lesson"><b>Compare under the same weather</b><p>Separate seasonal and weather variation from policy claims. A wind-only grouping is a starting point, not complete adjustment.</p></div>
-      <div class="lesson"><b>Plan for still-air days</b><p>Track high-pollution days as well as annual averages. An improving mean can coexist with severe episodes.</p></div>
-    </div>
-  </div>
+<section class="chapter divider verdict-section visual-scene" id="verdict-section" aria-labelledby="h6c">
+ <div class="chapter-intro"><div class="chapter-heading"><p class="eyebrow">The verdict · through 2015</p><h2 id="h6c">Early progress.<br><span class="verdict-accent">An unfinished answer.</span></h2></div><div class="chapter-deck"><p>Uneven improvement at these monitors does not establish a national policy victory.</p></div></div>
+ <div class="verdict-interact" role="group" aria-label="Highlight the two conclusions"><button type="button" class="story-toggle is-active" data-verdict="both" aria-pressed="true">Both findings</button><button type="button" class="story-toggle" data-verdict="progress" aria-pressed="false">What improved?</button><button type="button" class="story-toggle" data-verdict="health" aria-pressed="false">What remains?</button></div>
+ <div class="verdict-visual" role="group" aria-label="Three of five stations improved, but five of five remained above the WHO 2021 annual reference">
+   <div class="verdict-figure verdict-improve"><p class="eyebrow">2014 → 2015 · annual mean</p><div class="verdict-value"><strong>3<span>/5</span></strong><span>stations<br>improved</span></div><div class="station-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><p>Guangzhou · Beijing · Chengdu</p></div>
+   <div class="verdict-figure verdict-health"><p class="eyebrow">2015 · WHO 2021 annual reference</p><div class="verdict-value"><strong>5<span>/5</span></strong><span>stations<br>above 5 µg/m³</span></div><div class="station-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><p>A retrospective reference for these records.</p></div>
+ </div>
+ <div class="verdict-bottom"><p><strong>Our answer:</strong> early, uneven progress at these monitors—not proof of policy impact or a nationwide victory. Data end in 2015, before the plan's 2017 target.</p><button type="button" class="chip" data-dialog="verdictDetails">Lessons &amp; limits ↗</button></div>
+ <dialog class="evidence-dialog" id="verdictDetails" aria-labelledby="verdictDetailsTitle"><form method="dialog"><button class="chip" type="submit">Close ✕</button></form><h3 id="verdictDetailsTitle">What the findings mean</h3><p id="verdict"></p><h3>Three lessons for Thailand</h3><p><strong>Measure first.</strong> Publish reliable readings and missing-data coverage.</p><p><strong>Compare like with like.</strong> Account for weather and seasonal differences before attributing changes to policy.</p><p><strong>Watch the worst days.</strong> Track extreme pollution as well as annual averages.</p></dialog>
 </section>
 
 <section class="chapter divider" id="coverage-section" aria-labelledby="coverage-heading">

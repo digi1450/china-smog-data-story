@@ -1,5 +1,5 @@
-import { D } from './data.js?v=aab38014ca01';
-export { D, GEO } from './data.js?v=aab38014ca01';
+import { D } from './data.js?v=3410be10a028';
+export { D, GEO } from './data.js?v=3410be10a028';
 const CITIES = ['Beijing','Shenyang','Chengdu','Shanghai','Guangzhou'];
 const CK = {Beijing:'bj',Shenyang:'sy',Chengdu:'cd',Shanghai:'sh',Guangzhou:'gz'};
 const cvar = c => `var(--c-${CK[c]})`;

@@ -1,9 +1,10 @@
-import { D, DAY0, fmt, bandOf } from './core.js?v=aab38014ca01';
-import { reducedMotion } from './motion.js?v=aab38014ca01';
-import { createWheelIntent } from './wheel-intent.js?v=aab38014ca01';
-import { replayScoreReveal } from './charts/score.js?v=aab38014ca01';
+import { D, DAY0, fmt, bandOf } from './core.js?v=3410be10a028';
+import { reducedMotion } from './motion.js?v=3410be10a028';
+import { createWheelIntent } from './wheel-intent.js?v=3410be10a028';
+import { replayScoreReveal } from './charts/score.js?v=3410be10a028';
 
 const chapters = [
+  ['team', 'Project & team', 'Introduction'],
   ['top', 'The question', '2010–2015'],
   ['explorer', 'Five cities', 'Explore'],
   ['crisis-section', 'The crisis', 'Jan 2013'],

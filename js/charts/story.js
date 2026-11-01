@@ -1,6 +1,6 @@
-import { introduceChart, revealLine } from '../motion.js?v=aab38014ca01';
-import { selectCity } from '../actions.js?v=aab38014ca01';
-import { D, CITIES, cvar, state, MV, MONTHS, PLAN_I, DAY0, fmt, svgFor, widthOf, showTip, hideTip, annualOf, fmtDate } from '../core.js?v=aab38014ca01';
+import { introduceChart, revealLine } from '../motion.js?v=3410be10a028';
+import { selectCity } from '../actions.js?v=3410be10a028';
+import { D, CITIES, cvar, state, MV, MONTHS, PLAN_I, DAY0, fmt, svgFor, widthOf, showTip, hideTip, annualOf, fmtDate } from '../core.js?v=3410be10a028';
 
 function drawCrisis() {
   const W=widthOf('crisis'), H=Math.max(100,document.getElementById('crisis').clientHeight), m={l:42,r:18,t:24,b:32};
@@ -63,25 +63,54 @@ function drawTrend() {
   });
 }
 
+let exceedMode = 'share';
 function drawExceed() {
-  const W=widthOf('exceed'),m={l:W<500?80:100,r:55,t:15,b:30},rh=54,H=5*rh+m.t+m.b;
-  const svg=svgFor('exceed',W,H),x=d3.scaleLinear().domain([0,25]).range([m.l,W-m.r]);
-  svg.append('g').attr('class','axis').attr('transform',`translate(0,${H-m.b})`).call(d3.axisBottom(x).ticks(5).tickFormat(v=>v+'%').tickSizeOuter(0));
-  CITIES.forEach((c,k)=>{
-    const cy=m.t+k*rh;
-    svg.append('text').attr('class','lbl-strong').attr('x',0).attr('y',cy+19).text(c);
-    [2014,2015].forEach((yr,j)=>{
-      const a=annualOf(c,yr),p=100*a.above150/a.days, yy=cy+j*18;
-      svg.append('rect').attr('class','exceed-bar').attr('x',x(0)).attr('y',yy).attr('width',x(p)-x(0)).attr('height',12).style('fill',j?cvar(c):'var(--before)');
-      svg.append('text').attr('class','lbl').attr('x',x(p)+5).attr('y',yy+10).text(`${fmt(p)}%`);
+  const W = widthOf('exceed'), narrow = W < 600;
+  const m = {l:narrow?78:110,r:narrow?53:75,t:8,b:26};
+  const H = Math.max(150, document.getElementById('exceed').clientHeight);
+  const rh = (H-m.t-m.b)/5, step = Math.min(18,rh*.38), barHeight = Math.min(12,step-3);
+  const rows = CITIES.map(c=>({c, years:[2014,2015].map(y=>annualOf(c,y))}));
+  const metric = a => exceedMode === 'count' ? a.above150 : 100*a.above150/a.days;
+  const caption = document.getElementById('extreme-caption');
+  caption.textContent = exceedMode === 'count' ? 'Observed days above 150 µg/m³ · count' : 'Share of valid days above 150 µg/m³ · %';
+  const improved = rows.filter(r => metric(r.years[1]) < metric(r.years[0])).length;
+  document.getElementById('extremeFinding').innerHTML = `<strong class="accent-number">${improved} of 5</strong> monitors had ${exceedMode === 'count' ? 'fewer observed high-pollution days' : 'lower shares'} in 2015. <span>${exceedMode === 'count' ? 'Valid-day totals differ; compare shares too.' : 'Missing days are excluded.'}</span>`;
+  const maxValue = exceedMode === 'count' ? d3.max(rows.flatMap(r=>r.years.map(metric)))*1.13 : 25;
+  const svg = svgFor('exceed', W, H).attr('aria-label',caption.textContent), x = d3.scaleLinear().domain([0,maxValue]).range([m.l,W-m.r]);
+  svg.append('g').attr('class','grid').selectAll('line').data(x.ticks(5)).join('line').attr('x1',x).attr('x2',x).attr('y1',m.t).attr('y2',H-m.b);
+  svg.append('g').attr('class','axis').attr('transform',`translate(0,${H-m.b})`)
+    .call(d3.axisBottom(x).ticks(narrow?3:5).tickFormat(v=>exceedMode==='share'?v+'%':d3.format('d')(v)).tickSizeOuter(0));
+  rows.forEach(({c,years},k)=>{
+    const cy=m.t+k*rh+(rh-step-barHeight)/2;
+    const group=svg.append('g').attr('class','extreme-row').attr('tabindex',0).attr('role','group').attr('aria-label',`${c}, 2014 ${fmt(metric(years[0]))}${exceedMode === 'count' ? ' days' : '%'}, 2015 ${fmt(metric(years[1]))}${exceedMode === 'count' ? ' days' : '%'}`);
+    group.append('rect').attr('class','row-hit').attr('x',0).attr('y',m.t+k*rh).attr('width',W).attr('height',rh).style('fill','transparent');
+    group.append('text').attr('class','lbl-strong').attr('x',0).attr('y',cy+(step+barHeight)/2+4).text(c);
+    years.forEach((a,j)=>{
+      const value=metric(a),yy=cy+j*step;
+      group.append('rect').attr('class','exceed-bar').attr('x',x(0)).attr('y',yy).attr('height',barHeight).attr('rx',2).attr('width',Math.max(0,x(value)-x(0)))
+        .attr('data-target-width',Math.max(0,x(value)-x(0)))
+        .style('fill',j?cvar(c):'var(--before)');
+      group.append('text').attr('class','lbl').attr('x',x(value)+5).attr('y',yy+barHeight/2+3).text(exceedMode==='share'?`${fmt(value)}%`:`${a.above150} ${a.above150 === 1 ? 'day' : 'days'}`);
     });
+    const tip=`<b>${c}</b><br>`+years.map(a=>`${a.year}: ${a.above150} of ${a.days} valid days (${fmt(100*a.above150/a.days)}%)`).join('<br>');
+    group.on('pointerenter focusin',e=>{svg.selectAll('.extreme-row').classed('is-dim',function(){return this!==group.node()}); if(e.type==='pointerenter')showTip(tip,e)})
+      .on('pointermove',e=>showTip(tip,e)).on('pointerleave focusout',()=>{svg.selectAll('.extreme-row').classed('is-dim',false);hideTip()});
   });
-  introduceChart(svg,'exceed',chart=>{
-    chart.selectAll('.exceed-bar').each(function(){this.dataset.width=this.getAttribute('width');})
-      .attr('width',0).transition('intro').duration(600).delay((d,i)=>i*35).attr('width',function(){return this.dataset.width;});
+  const animate=()=>{
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    svg.selectAll('.exceed-bar').interrupt()
+      .attr('width',0).transition().duration(680).delay((d,i)=>i*52).ease(d3.easeCubicOut)
+      .attr('width',function(){return +this.dataset.targetWidth});
+  };
+  introduceChart(svg,'exceed',animate);
+  document.getElementById('extremeReplay').onclick=animate;
+  document.querySelectorAll('[data-exceed-mode]').forEach(btn=>{
+    const active=btn.dataset.exceedMode===exceedMode;
+    btn.classList.toggle('is-active',active);btn.setAttribute('aria-pressed',String(active));
+    btn.onclick=()=>{if(exceedMode===btn.dataset.exceedMode)return;exceedMode=btn.dataset.exceedMode;drawExceed()};
   });
-  const rows=CITIES.flatMap(c=>[2014,2015].map(y=>{const a=annualOf(c,y);return [c,y,a.above150,`${fmt(100*a.above150/a.days)}%`,a.days,a.missing];}));
-  document.getElementById('exceedTable').innerHTML=table(['City','Year','Days >150','Share of valid days','Valid days','Missing days'],rows,'Grey bars: 2014. City-coloured bars: 2015.');
+  const tableRows=CITIES.flatMap(c=>[2014,2015].map(y=>{const a=annualOf(c,y);return [c,y,a.above150,`${fmt(100*a.above150/a.days)}%`,a.days,a.missing]}));
+  document.getElementById('exceedTable').innerHTML=table(['City','Year','Days >150','Share of valid days','Valid days','Missing days'],tableRows,'Grey bars: 2014. City-coloured bars: 2015.');
 }
 
 function table(headers,rows,caption) {
