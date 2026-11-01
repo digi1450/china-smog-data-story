@@ -1,6 +1,5 @@
-import { introduceChart, revealLine } from '../motion.js?v=3410be10a028';
-import { selectCity } from '../actions.js?v=3410be10a028';
-import { D, CITIES, cvar, state, MV, MONTHS, PLAN_I, DAY0, fmt, svgFor, widthOf, showTip, hideTip, annualOf, fmtDate } from '../core.js?v=3410be10a028';
+import { introduceChart, revealLine } from '../motion.js?v=bc46f842bc35';
+import { D, CITIES, cvar, DAY0, fmt, svgFor, widthOf, showTip, hideTip, annualOf, fmtDate } from '../core.js?v=bc46f842bc35';
 
 function drawCrisis() {
   const W=widthOf('crisis'), H=Math.max(100,document.getElementById('crisis').clientHeight), m={l:42,r:18,t:24,b:32};
@@ -24,43 +23,6 @@ function drawCrisis() {
   annotation.append('text').attr('y',35).style('font-family','var(--f-display)').style('font-size',W<500?'28px':'40px').style('font-weight',700).style('fill','var(--ink)').text(fmt(peak.v));
   annotation.append('text').attr('class','lbl').attr('x',W<500?87:126).attr('y',35).text('µg/m³');
   introduceChart(svg,'crisis',chart=>revealLine(chart));
-}
-
-function drawTrend() {
-  const W=widthOf('trend'),H=320,m={l:46,r:18,t:28,b:30};
-  const svg=svgFor('trend',W,H);
-  const x=d3.scaleTime().domain([MONTHS[0],MONTHS.at(-1)]).range([m.l,W-m.r]);
-  const y=d3.scaleLinear().domain([0,d3.max(CITIES.flatMap(c=>MV[c]))*1.1]).nice().range([H-m.b,m.t]);
-  const boundary=x(MONTHS[PLAN_I]);
-  svg.append('rect').attr('x',boundary).attr('y',m.t).attr('width',W-m.r-boundary).attr('height',H-m.b-m.t).style('fill','var(--accent)').style('opacity',.055);
-  svg.append('g').attr('class','grid').selectAll('line').data(y.ticks(5)).join('line').attr('x1',m.l).attr('x2',W-m.r).attr('y1',y).attr('y2',y);
-  svg.append('g').attr('class','axis').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(0));
-  svg.append('g').attr('class','axis').attr('transform',`translate(0,${H-m.b})`).call(d3.axisBottom(x).ticks(d3.timeYear.every(W<500?2:1)).tickFormat(d3.timeFormat('%Y')).tickSizeOuter(0));
-  svg.append('line').attr('x1',boundary).attr('x2',boundary).attr('y1',m.t).attr('y2',H-m.b).style('stroke','var(--ink-2)').style('stroke-dasharray','4,3');
-  svg.append('text').attr('class','lbl').attr('x',boundary+5).attr('y',m.t-9).text(W<500?'Sep 2013':'Action Plan · Sep 2013');
-  const line=d3.line().defined(v=>v!=null).x((v,i)=>x(MONTHS[i])).y(v=>y(v));
-  [...CITIES.filter(c=>c!==state.city),state.city].forEach(c=>svg.append('path').attr('class','trend-series').attr('data-city',c).attr('d',line(MV[c])).style('fill','none').style('stroke',cvar(c)).style('stroke-width',c===state.city?2.8:1.5).style('opacity',c===state.city?1:.55));
-  const highlight=svg.append('g').attr('hidden',true);
-  highlight.append('line').attr('y1',m.t).attr('y2',H-m.b).style('stroke','var(--ink-3)');
-  svg.append('rect').attr('x',m.l).attr('y',m.t).attr('width',W-m.r-m.l).attr('height',H-m.b-m.t).style('fill','transparent')
-    .on('pointermove',e=>{
-      const dt=x.invert(d3.pointer(e)[0]); const i=Math.max(0,Math.min(71,Math.round(d3.timeMonth.count(MONTHS[0],dt))));
-      highlight.attr('hidden',null).select('line').attr('x1',x(MONTHS[i])).attr('x2',x(MONTHS[i]));
-      showTip(`<b>${d3.timeFormat('%b %Y')(MONTHS[i])}</b><br>`+CITIES.map(c=>`${c}: ${MV[c][i]==null?'no data':fmt(MV[c][i])+' µg/m³'}`).join('<br>'),e);
-    }).on('pointerleave',()=>{highlight.attr('hidden',true);hideTip();});
-  const legend=document.getElementById('trendLegend');
-  legend.innerHTML=CITIES.map(c=>`<button type="button" data-city="${c}" aria-pressed="${c===state.city}"><i style="background:${cvar(c)}"></i>${c}</button>`).join('');
-  const emphasize=c=>svg.selectAll('.trend-series').style('opacity',function(){return this.dataset.city===c?1:.18;}).style('stroke-width',function(){return this.dataset.city===c?2.8:1.5;});
-  legend.querySelectorAll('button').forEach(button=>{
-    button.addEventListener('click',()=>selectCity(button.dataset.city));
-    button.addEventListener('pointerenter',()=>emphasize(button.dataset.city));
-    button.addEventListener('focus',()=>emphasize(button.dataset.city));
-    button.addEventListener('pointerleave',()=>emphasize(state.city));
-    button.addEventListener('blur',()=>emphasize(state.city));
-  });
-  introduceChart(svg,'trend',chart=>{
-    chart.selectAll('.trend-series').each(function(){revealLine(d3.select(this.parentNode),`path[data-city="${this.dataset.city}"]`);});
-  });
 }
 
 let exceedMode = 'share';
@@ -131,9 +93,9 @@ function fillEvidence() {
   const w=D.weatherCheck;
   document.getElementById('weatherFinding').textContent=`Reweighting matching calendar-month × wind groups to the same distribution gives ${fmt(w.before)} versus ${fmt(w.after)} µg/m³ (${fmt((w.after/w.before-1)*100)}%). The check retains ${w.before_n}/${w.eligibleBefore} eligible pre-plan days and ${w.after_n}/${w.eligibleAfter} post-plan days across ${w.strata.length} shared groups. This reduces two sources of composition difference; it does not identify what caused the change.`;
   const rmin=d3.min(D.trust,t=>t.r),rmax=d3.max(D.trust,t=>t.r);
-  document.getElementById('trustFinding').textContent=`Across ${D.trust.length} non-duplicate station comparisons, daily correlation ranges from ${rmin.toFixed(2)} to ${rmax.toFixed(2)}. Use the selector to inspect signed bias and mean absolute error as well as correlation.`;
+  document.getElementById('trustFinding').textContent=`Across ${D.trust.length} non-duplicate station comparisons, daily correlation ranges from ${rmin.toFixed(2)} to ${rmax.toFixed(2)}. Station summaries include signed bias and mean absolute error as well as correlation.`;
   document.getElementById('verdict').textContent=`From 2014 to 2015, annual means fell at ${CITIES.filter(c=>delta(c)<0).length} of five U.S. posts. All five 2015 station means remained above the WHO 2021 annual reference of 5 µg/m³ (and the WHO 2005 reference of 10). This is evidence of uneven improvement in observed concentrations, not proof that the plan caused it.`;
   document.getElementById('coverageTable').innerHTML=table(['City','First valid hour (date)','First qualifying day','2014 valid days','2015 valid days'],CITIES.map(c=>[c,D.coverage[c].firstHour,D.coverage[c].firstDay,`${annualOf(c,2014).days}/365`,`${annualOf(c,2015).days}/365`]),'Coverage calculated from the downloaded UCI CSV files.');
 }
 
-export {drawCrisis,drawTrend,drawExceed,fillEvidence};
+export {drawCrisis,drawExceed,fillEvidence};

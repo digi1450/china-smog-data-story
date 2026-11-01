@@ -1,5 +1,5 @@
-import { reducedMotion } from './motion.js?v=3410be10a028';
-import { navigateToScene } from './presentation.js?v=3410be10a028';
+import { reducedMotion } from './motion.js?v=bc46f842bc35';
+import { navigateToScene } from './presentation.js?v=bc46f842bc35';
 
 export function setupStoryNavigation() {
  const targetFor = hash => {

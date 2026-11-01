@@ -1,14 +1,11 @@
-import { createPlayback } from './playback.js?v=3410be10a028';
-import { reducedMotion } from './motion.js?v=3410be10a028';
-import { EXPLORER_EVENTS } from './actions.js?v=3410be10a028';
-import { CITIES, CK, cvar, INFO, BANDS, bandOf, MONTHS, PLAN_I, fmtDate, COMMON_I, state, MV, annualOf, fmt, worstDay } from './core.js?v=3410be10a028';
-import { drawMap, updateMap } from './charts/map.js?v=3410be10a028';
-import { drawMini, updateMiniMarker } from './charts/mini.js?v=3410be10a028';
-import { drawCalendar } from './charts/calendar.js?v=3410be10a028';
-import { drawTrend } from './charts/story.js?v=3410be10a028';
+import { createPlayback } from './playback.js?v=bc46f842bc35';
+import { reducedMotion } from './motion.js?v=bc46f842bc35';
+import { EXPLORER_EVENTS } from './actions.js?v=bc46f842bc35';
+import { CITIES, CK, cvar, INFO, BANDS, bandOf, MONTHS, PLAN_I, fmtDate, COMMON_I, state, MV, annualOf, fmt, worstDay } from './core.js?v=bc46f842bc35';
+import { drawMap, updateMap } from './charts/map.js?v=bc46f842bc35';
+import { drawMini, updateMiniMarker } from './charts/mini.js?v=bc46f842bc35';
 
 const bandLegendHTML = BANDS.map((b,i) => `<span><i style="background:var(--b${i})"></i>${b.r}</span>`).join('');
-document.getElementById('bandLegend').innerHTML = bandLegendHTML;
 document.getElementById('mapLegend').innerHTML = bandLegendHTML + '<span><i class="dot" style="background:transparent;border:1.5px solid var(--ink-3)"></i>insufficient data</span>';
 function layoutTrack() {
   const span = 71 - state.min;
@@ -86,7 +83,7 @@ function selectCity(c) {
   stopPlay();
   state.city = c;
   chipEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === c));
-  updateMap(); updatePanel(); drawMini(); drawCalendar(); drawTrend();
+  updateMap(); updatePanel(); drawMini();
   if (!reducedMotion()) document.querySelector('#panel .cityhead').animate(
     [{opacity:.3, transform:'translateY(5px)'},{opacity:1, transform:'translateY(0)'}],
     {duration:280, easing:'ease-out'});
@@ -123,7 +120,6 @@ export function renderExplorer() {
   drawMap();
   updatePanel();
   drawMini();
-  drawCalendar();
   setMonth(state.month);
 }
 

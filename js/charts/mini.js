@@ -1,5 +1,5 @@
-import { CITIES, cvar, MONTHS, PLAN_I, state, MV, showTip, hideTip, svgFor, widthOf } from '../core.js?v=3410be10a028';
-import { setMonth, stopPlay } from '../actions.js?v=3410be10a028';
+import { CITIES, cvar, MONTHS, PLAN_I, state, MV, showTip, hideTip, svgFor, widthOf } from '../core.js?v=bc46f842bc35';
+import { setMonth, stopPlay } from '../actions.js?v=bc46f842bc35';
 
 let mini = null;
 function drawMini() {

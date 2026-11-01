@@ -1,5 +1,5 @@
-import { D } from './data.js?v=3410be10a028';
-export { D, GEO } from './data.js?v=3410be10a028';
+import { D } from './data.js?v=bc46f842bc35';
+export { D, GEO } from './data.js?v=bc46f842bc35';
 const CITIES = ['Beijing','Shenyang','Chengdu','Shanghai','Guangzhou'];
 const CK = {Beijing:'bj',Shenyang:'sy',Chengdu:'cd',Shanghai:'sh',Guangzhou:'gz'};
 const cvar = c => `var(--c-${CK[c]})`;
@@ -24,7 +24,6 @@ const BANDS = [
   {max:35,name:'',r:'≤35'},{max:75,name:'',r:'>35–75'},{max:115,name:'',r:'>75–115'},
   {max:150,name:'',r:'>115–150'},{max:250,name:'',r:'>150–250'},{max:Infinity,name:'',r:'>250'}];
 const bandOf = v => BANDS.findIndex(b => v <= b.max);
-const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const MONTHS = d3.timeMonths(new Date(2010,0,1), new Date(2016,0,1));
 const PLAN_I = 44; // Sep 2013
 const DAY0 = new Date(2010,0,1);
@@ -69,4 +68,4 @@ function svgFor(id, w, h) {
 const widthOf = id => Math.max(280, document.getElementById(id).clientWidth);
 
 
-export { CITIES,CK,cvar,INFO,BANDS,bandOf,MON,MONTHS,PLAN_I,DAY0,fmtDate,ym,COMMON_I,state,MV,annualOf,fmt,showTip,hideTip,svgFor,widthOf };
+export { CITIES,CK,cvar,INFO,BANDS,bandOf,MONTHS,PLAN_I,DAY0,fmtDate,ym,COMMON_I,state,MV,annualOf,fmt,showTip,hideTip,svgFor,widthOf };

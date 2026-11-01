@@ -1,7 +1,7 @@
-import { D, DAY0, fmt, bandOf } from './core.js?v=3410be10a028';
-import { reducedMotion } from './motion.js?v=3410be10a028';
-import { createWheelIntent } from './wheel-intent.js?v=3410be10a028';
-import { replayScoreReveal } from './charts/score.js?v=3410be10a028';
+import { D, DAY0, fmt, bandOf } from './core.js?v=bc46f842bc35';
+import { reducedMotion } from './motion.js?v=bc46f842bc35';
+import { createWheelIntent } from './wheel-intent.js?v=bc46f842bc35';
+import { replayScoreReveal } from './charts/score.js?v=bc46f842bc35';
 
 const chapters = [
   ['team', 'Project & team', 'Introduction'],
@@ -12,11 +12,7 @@ const chapters = [
   ['extremes-section', 'The extremes', '2014 → 2015'],
   ['wind-section', 'The weather', 'Before / after'],
   ['verdict-section', 'The answer', 'Through 2015'],
-  ['trend-section', 'Q&A · The timeline', '2010–2015'],
-  ['daily-section', 'Q&A · Every day', '2010–2015'],
-  ['trust-section', 'Q&A · The cross-check', 'Paired days'],
-  ['coverage-section', 'Q&A · Data coverage', 'The record'],
-  ['sources', 'Q&A · Sources & method', 'References']
+  ['sources', 'Sources & method', 'References']
 ];
 
 let navigate = () => false;

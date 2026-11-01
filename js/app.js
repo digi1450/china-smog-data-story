@@ -1,20 +1,17 @@
-import { hideTip } from './core.js?v=3410be10a028';
-import { setupScrollMotion, setupDisclosureMotion } from './motion.js?v=3410be10a028';
-import { setupPresentation } from './presentation.js?v=3410be10a028';
-import { setupStoryNavigation } from './navigation.js?v=3410be10a028';
-import { setupExplorer, renderExplorer } from './explorer.js?v=3410be10a028';
-import { drawScore } from './charts/score.js?v=3410be10a028';
-import { drawWind } from './charts/wind.js?v=3410be10a028';
-import { drawTrust } from './charts/trust.js?v=3410be10a028';
-import { drawCrisis, drawTrend, drawExceed, fillEvidence } from './charts/story.js?v=3410be10a028';
+import { hideTip } from './core.js?v=bc46f842bc35';
+import { setupScrollMotion, setupDisclosureMotion } from './motion.js?v=bc46f842bc35';
+import { setupPresentation } from './presentation.js?v=bc46f842bc35';
+import { setupStoryNavigation } from './navigation.js?v=bc46f842bc35';
+import { setupExplorer, renderExplorer } from './explorer.js?v=bc46f842bc35';
+import { drawScore } from './charts/score.js?v=bc46f842bc35';
+import { drawWind } from './charts/wind.js?v=bc46f842bc35';
+import { drawCrisis, drawExceed, fillEvidence } from './charts/story.js?v=bc46f842bc35';
 
 function renderAll() {
   renderExplorer();
   drawScore();
   drawWind();
-  drawTrust();
   drawCrisis();
-  drawTrend();
   drawExceed();
 }
 
