@@ -1,5 +1,5 @@
-import { introduceChart, revealLine } from '../motion.js?v=bc46f842bc35';
-import { D, CITIES, cvar, DAY0, fmt, svgFor, widthOf, showTip, hideTip, annualOf, fmtDate } from '../core.js?v=bc46f842bc35';
+import { introduceChart, revealLine } from '../motion.js?v=e890458f6fd3';
+import { D, CITIES, cvar, DAY0, fmt, svgFor, widthOf, showTip, hideTip, annualOf, fmtDate } from '../core.js?v=e890458f6fd3';
 
 function drawCrisis() {
   const W=widthOf('crisis'), H=Math.max(100,document.getElementById('crisis').clientHeight), m={l:42,r:18,t:24,b:32};

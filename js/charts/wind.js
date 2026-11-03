@@ -1,4 +1,4 @@
-import { D, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=bc46f842bc35';
+import { D, fmt, showTip, hideTip, svgFor, widthOf } from '../core.js?v=e890458f6fd3';
 
 let selectedWind='all';
 const WIND_LABELS={cv:'calm/variable',SE:'south-east',NW:'north-west',NE:'north-east'};

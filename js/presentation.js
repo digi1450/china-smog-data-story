@@ -1,7 +1,7 @@
-import { D, DAY0, fmt, bandOf } from './core.js?v=bc46f842bc35';
-import { reducedMotion } from './motion.js?v=bc46f842bc35';
-import { createWheelIntent } from './wheel-intent.js?v=bc46f842bc35';
-import { replayScoreReveal } from './charts/score.js?v=bc46f842bc35';
+import { D, DAY0, fmt, bandOf } from './core.js?v=e890458f6fd3';
+import { reducedMotion } from './motion.js?v=e890458f6fd3';
+import { createWheelIntent } from './wheel-intent.js?v=e890458f6fd3';
+import { replayScoreReveal } from './charts/score.js?v=e890458f6fd3';
 
 const chapters = [
   ['team', 'Project & team', 'Introduction'],

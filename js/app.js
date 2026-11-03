@@ -1,11 +1,11 @@
-import { hideTip } from './core.js?v=bc46f842bc35';
-import { setupScrollMotion, setupDisclosureMotion } from './motion.js?v=bc46f842bc35';
-import { setupPresentation } from './presentation.js?v=bc46f842bc35';
-import { setupStoryNavigation } from './navigation.js?v=bc46f842bc35';
-import { setupExplorer, renderExplorer } from './explorer.js?v=bc46f842bc35';
-import { drawScore } from './charts/score.js?v=bc46f842bc35';
-import { drawWind } from './charts/wind.js?v=bc46f842bc35';
-import { drawCrisis, drawExceed, fillEvidence } from './charts/story.js?v=bc46f842bc35';
+import { hideTip } from './core.js?v=e890458f6fd3';
+import { setupScrollMotion, setupDisclosureMotion } from './motion.js?v=e890458f6fd3';
+import { setupPresentation } from './presentation.js?v=e890458f6fd3';
+import { setupStoryNavigation } from './navigation.js?v=e890458f6fd3';
+import { setupExplorer, renderExplorer } from './explorer.js?v=e890458f6fd3';
+import { drawScore } from './charts/score.js?v=e890458f6fd3';
+import { drawWind } from './charts/wind.js?v=e890458f6fd3';
+import { drawCrisis, drawExceed, fillEvidence } from './charts/story.js?v=e890458f6fd3';
 
 function renderAll() {
   renderExplorer();
